@@ -96,6 +96,44 @@ func flick(deltaPx: Double) {
     scrollEvent(0, phase: 0, momentum: 3)  // end
 }
 
+// Click a menu item by title path, e.g. menu com.apple.Safari File "New Window" "New MFGA Window".
+func axChildren(_ el: AXUIElement) -> [AXUIElement] {
+    var v: CFTypeRef?
+    AXUIElementCopyAttributeValue(el, kAXChildrenAttribute as CFString, &v)
+    return (v as? [AXUIElement]) ?? []
+}
+
+func axTitle(_ el: AXUIElement) -> String {
+    var v: CFTypeRef?
+    AXUIElementCopyAttributeValue(el, kAXTitleAttribute as CFString, &v)
+    return (v as? String) ?? ""
+}
+
+func clickMenu(bundleID: String, path: [String]) {
+    guard let app = NSRunningApplication.runningApplications(withBundleIdentifier: bundleID).first else {
+        die("\(bundleID) not running")
+    }
+    let ax = AXUIElementCreateApplication(app.processIdentifier)
+    var mb: CFTypeRef?
+    AXUIElementCopyAttributeValue(ax, kAXMenuBarAttribute as CFString, &mb)
+    guard let menuBar = mb else { die("no menu bar") }
+    var current = menuBar as! AXUIElement
+    for (i, title) in path.enumerated() {
+        // Items live directly under the menu bar, or under the AXMenu child of a menu item.
+        var candidates = axChildren(current)
+        if i > 0 { candidates = candidates.flatMap { axChildren($0) } }
+        guard let item = candidates.first(where: { axTitle($0) == title }) else {
+            let titles = candidates.map(axTitle).filter { !$0.isEmpty }
+            die("menu item '\(title)' not found; have: \(titles)")
+        }
+        if i == path.count - 1 {
+            AXUIElementPerformAction(item, kAXPressAction as CFString)
+        } else {
+            current = item
+        }
+    }
+}
+
 // Private DisplayServices brightness getter (read-only).
 func brightness() -> Float {
     let path = "/System/Library/PrivateFrameworks/DisplayServices.framework/DisplayServices"
@@ -109,13 +147,26 @@ func brightness() -> Float {
     return b
 }
 
-let args = Array(CommandLine.arguments.dropFirst())
+var args = Array(CommandLine.arguments.dropFirst())
+// When launched as an app bundle via `open`, stdout is lost; --out FILE redirects it.
+if let i = args.firstIndex(of: "--out"), i + 1 < args.count {
+    let path = args[i + 1]
+    args.removeSubrange(i...(i + 1))
+    FileManager.default.createFile(atPath: path, contents: nil)
+    freopen(path, "w", stdout)
+}
+setvbuf(stdout, nil, _IOLBF, 0)
 guard let cmd = args.first else {
     die("usage: mfga-input trusted|key K [mods..]|move X Y|click X Y|flick PX|scroll SECONDS PX INTERVAL|brightness|screen")
 }
 switch cmd {
 case "trusted":
-    print(AXIsProcessTrusted() ? "yes" : "no")
+    if args.count > 1 && args[1] == "--prompt" {
+        let opts = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
+        print(AXIsProcessTrustedWithOptions(opts) ? "yes" : "no")
+    } else {
+        print(AXIsProcessTrusted() ? "yes" : "no")
+    }
 case "key":
     guard args.count >= 2 else { die("key needs a name") }
     key(args[1], mods: Array(args.dropFirst(2)))
@@ -134,6 +185,36 @@ case "scroll":
         flick(deltaPx: px)
         let rest = interval - Date().timeIntervalSince(t0)
         if rest > 0 { usleep(useconds_t(rest * 1_000_000)) }
+    }
+case "menu":
+    clickMenu(bundleID: args[1], path: Array(args.dropFirst(2)))
+case "activate":
+    // activate BUNDLE_ID: bring an app to the front.
+    guard let app = NSRunningApplication.runningApplications(withBundleIdentifier: args[1]).first else {
+        die("\(args[1]) not running")
+    }
+    app.activate(options: [.activateAllWindows])
+case "frontmost":
+    print(NSWorkspace.shared.frontmostApplication?.bundleIdentifier ?? "?")
+case "rclick":
+    let p = CGPoint(x: Double(args[1])!, y: Double(args[2])!)
+    move(p.x, p.y)
+    usleep(50_000)
+    CGEvent(mouseEventSource: nil, mouseType: .rightMouseDown, mouseCursorPosition: p, mouseButton: .right)!
+        .post(tap: .cghidEventTap)
+    usleep(40_000)
+    CGEvent(mouseEventSource: nil, mouseType: .rightMouseUp, mouseCursorPosition: p, mouseButton: .right)!
+        .post(tap: .cghidEventTap)
+case "type":
+    // type TEXT: unicode text input (for URL bars, search boxes).
+    let src = CGEventSource(stateID: .hidSystemState)
+    for ch in args[1].utf16 {
+        var c = ch
+        let d = CGEvent(keyboardEventSource: src, virtualKey: 0, keyDown: true)!
+        d.keyboardSetUnicodeString(stringLength: 1, unicodeString: &c)
+        let u = CGEvent(keyboardEventSource: src, virtualKey: 0, keyDown: false)!
+        u.keyboardSetUnicodeString(stringLength: 1, unicodeString: &c)
+        d.post(tap: .cghidEventTap); usleep(8_000); u.post(tap: .cghidEventTap); usleep(8_000)
     }
 case "brightness":
     print(String(format: "%.3f", brightness()))

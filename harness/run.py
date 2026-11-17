@@ -17,6 +17,7 @@ from datetime import datetime
 from pathlib import Path
 
 import browsers
+import inputctl
 import power
 import preflight
 import yt
@@ -24,7 +25,6 @@ import yt
 ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "results" / "raw.noindex"
 RUNS = ROOT / "results" / "runs.jsonl"
-INPUT = str(ROOT / "bin" / "mfga-input")
 
 WARMUP_S = 20
 MEASURE_S = 150
@@ -42,12 +42,9 @@ def _youtube(video: str, quality: str, fullscreen: bool):
         yt.set_quality(b, quality)
         time.sleep(2)
         b.focus()
-        s = yt.state(b)
-        if s.get("paused"):
-            browsers.real_key("k")
-            time.sleep(1)
+        yt.ensure_playing(b)
         if fullscreen:
-            browsers.real_key("f")
+            yt.enter_fullscreen(b)
             time.sleep(4)
         browsers.mouse_park()
         s = yt.state(b)
@@ -69,8 +66,7 @@ def _background_audio():
         yt.wait_ready(b)
         yt.set_quality(b, "hd1080")
         b.focus()
-        if yt.state(b).get("paused"):
-            browsers.real_key("k")
+        yt.ensure_playing(b)
         time.sleep(2)
         b.new_tab("https://example.com/")
         browsers.mouse_park()
@@ -85,11 +81,11 @@ def _scroll(url: str, flick_px: int = 1400, interval_s: float = 1.6):
         time.sleep(5)
         b.focus()
         # Pointer over the content column so scroll events target the page.
-        subprocess.run([INPUT, "move", "756", "520"], check=True)
+        inputctl.ev("move", "756", "520")
         return {"url": url}
 
     def during(b):
-        return subprocess.Popen([INPUT, "scroll", str(MEASURE_S), str(flick_px), str(interval_s)])
+        return inputctl.ev_background("scroll", str(MEASURE_S), str(flick_px), str(interval_s))
 
     def verify(b):
         return {"scrollY": b.js("return Math.round(window.scrollY)")}
@@ -131,6 +127,8 @@ def run_one(browser_name: str, workload: str, label: str, prefs: dict | None, ex
             b.launch()
             rec_info["setup"] = wl["setup"](b)
         time.sleep(WARMUP_S)
+        if b:
+            b.quiesce(MEASURE_S)
         rec = power.PowerRecorder(MEASURE_S, out_dir)
         rec.start()
         driver = wl["during"](b) if wl.get("during") else None
@@ -141,6 +139,12 @@ def run_one(browser_name: str, workload: str, label: str, prefs: dict | None, ex
             rec_info["verify"] = wl["verify"](b)
         rec_info["summary"] = power.summarize(r, None if wl.get("no_browser") else browser_name)
         rec_info["ok"] = True
+        st, vf = rec_info.get("setup") or {}, rec_info.get("verify") or {}
+        if "state" in vf:  # YouTube: must still be playing, and must have played through the window
+            played = (vf.get("t") or 0) - (st.get("t") or 0)
+            if vf.get("state") != 1 or played < MEASURE_S * 0.95:
+                rec_info["ok"] = False
+                rec_info["error"] = f"video not playing through window: state={vf.get('state')} played={played:.0f}s"
     except Exception as e:  # noqa: BLE001
         rec_info["ok"] = False
         rec_info["error"] = repr(e)
@@ -178,7 +182,9 @@ def main():
     ap.add_argument("--prefs", default="{}", help="JSON prefs overlay for Firefox/Zen")
     ap.add_argument("--extensions", default="uBOLiteRedux@raymondhill.net")
     ap.add_argument("--allow-plugged", action="store_true")
+    ap.add_argument("--measure", type=int, default=MEASURE_S)
     a = ap.parse_args()
+    globals()["MEASURE_S"] = a.measure
 
     ok, problems, _ = preflight.check(require_battery=not a.allow_plugged)
     if not ok:

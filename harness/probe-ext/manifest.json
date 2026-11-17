@@ -1,0 +1,9 @@
+{
+  "manifest_version": 2,
+  "name": "MFGA probe",
+  "version": "1.0",
+  "description": "Measurement-harness control channel (navigate, run page JS, tabs, window). Talks only to 127.0.0.1.",
+  "browser_specific_settings": { "gecko": { "id": "mfga-probe@local" } },
+  "permissions": ["tabs", "<all_urls>"],
+  "background": { "scripts": ["background.js"], "persistent": true }
+}

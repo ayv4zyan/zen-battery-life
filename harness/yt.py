@@ -15,12 +15,12 @@ def watch_url(key: str) -> str:
 
 
 STATE_JS = r"""
-const p = document.getElementById('movie_player');
+const p = P(document.getElementById('movie_player'));
 const v = document.querySelector('video.html5-main-video') || document.querySelector('video');
 if (!p || !v || !p.getPlayerState) return {ready: false};
 const q = v.getVideoPlaybackQuality ? v.getVideoPlaybackQuality() : {};
 let nerds = {};
-try { nerds = p.getStatsForNerds ? p.getStatsForNerds() : {}; } catch (e) {}
+try { nerds = p.getStatsForNerds ? JSON.parse(JSON.stringify(p.getStatsForNerds())) : {}; } catch (e) {}
 return {
   ready: true,
   state: p.getPlayerState(),
@@ -52,4 +52,45 @@ def wait_ready(b, timeout=45) -> dict:
 
 
 def set_quality(b, q: str):
-    b.js(f"const p=document.getElementById('movie_player'); p.setPlaybackQualityRange('{q}','{q}'); return true;")
+    b.js(f"const p=P(document.getElementById('movie_player')); p.setPlaybackQualityRange('{q}','{q}'); return true;")
+
+
+SCREEN_RECT_JS = r"""
+const el = document.querySelector(%s);
+if (!el) return null;
+const r = el.getBoundingClientRect();
+const chromeTop = window.outerHeight - window.innerHeight;
+const chromeLeft = (window.outerWidth - window.innerWidth) / 2;
+return {x: window.screenX + chromeLeft + r.left + r.width / 2,
+        y: window.screenY + chromeTop + r.top + r.height / 2,
+        w: r.width, h: r.height};
+"""
+
+
+def element_screen_center(b, selector: str):
+    import json
+    return b.js(SCREEN_RECT_JS % json.dumps(selector))
+
+
+def click_element(b, selector: str, hover_first: str | None = None):
+    """Real mouse click on an element (a genuine user gesture)."""
+    import inputctl
+    if hover_first:
+        h = element_screen_center(b, hover_first)
+        if h:
+            inputctl.ev("move", str(int(h["x"])), str(int(h["y"])))
+            time.sleep(0.6)
+    c = element_screen_center(b, selector)
+    if not c:
+        raise RuntimeError(f"element not found: {selector}")
+    inputctl.ev("click", str(int(c["x"])), str(int(c["y"])))
+
+
+def enter_fullscreen(b):
+    click_element(b, ".ytp-fullscreen-button", hover_first="#movie_player")
+
+
+def ensure_playing(b):
+    if state(b).get("paused"):
+        click_element(b, ".ytp-play-button", hover_first="#movie_player")
+        time.sleep(1)

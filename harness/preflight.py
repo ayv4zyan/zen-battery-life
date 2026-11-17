@@ -5,10 +5,10 @@ import json
 import subprocess
 from pathlib import Path
 
+import inputctl
 import power
 
 ROOT = Path(__file__).resolve().parent.parent
-INPUT = ROOT / "bin" / "mfga-input"
 REF = ROOT / "results" / "conditions.json"
 BROWSER_PROCS = {"safari": "Safari", "firefox": "firefox", "zen": "zen"}
 
@@ -22,14 +22,14 @@ def conditions() -> dict:
     vol = _run("osascript", "-e", "output volume of (get volume settings)")
     muted = _run("osascript", "-e", "output muted of (get volume settings)")
     return {
-        "brightness": float(_run(str(INPUT), "brightness") or -1),
+        "brightness": float(inputctl.query("brightness") or -1),
         "volume": int(vol) if vol.isdigit() else None,
         "muted": muted == "true",
         "on_battery": b["on_battery"],
         "charge_pct": b["charge_pct"],
         "low_power_mode": "lowpowermode         1" in _run("pmset", "-g"),
         "thermal": _run("pmset", "-g", "therm"),
-        "accessibility": _run(str(INPUT), "trusted") == "yes",
+        "accessibility": inputctl.trusted(),
         "sudo_powermetrics": power.sudo_powermetrics_ok(),
         "running_browsers": [k for k, p in BROWSER_PROCS.items()
                              if subprocess.run(["pgrep", "-x", p], capture_output=True).returncode == 0],
