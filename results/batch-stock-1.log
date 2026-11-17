@@ -1,0 +1,3 @@
+[1/2] safari   yt-1080p60-fullscreen    system  5.71 W  chip  0.30 W (cpu 0.19 gpu 0.11)  browser EI   30.8  WS cpu 138.3 ms/s
+[1/2] firefox  yt-1080p60-fullscreen    system  5.71 W  chip  0.38 W (cpu 0.19 gpu 0.19)  browser EI   69.6  WS cpu 209.5 ms/s
+[1/2] zen      yt-1080p60-fullscreen    FAILED TimeoutError('probe command ping timed out')

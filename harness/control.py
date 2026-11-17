@@ -23,6 +23,9 @@ class _State:
     cond = threading.Condition()
     ids = itertools.count(1)
     last_poll = 0.0
+    # Bumped on every browser launch. A long-poll left open by a browser that has since quit must
+    # not take commands meant for the next browser.
+    gen = 0
 
 
 class _Handler(BaseHTTPRequestHandler):
@@ -32,20 +35,33 @@ class _Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path.startswith("/next"):
             _State.last_poll = time.time()
-            try:
-                cmd = _State.commands.get(timeout=20)
-            except queue.Empty:
+            my_gen = _State.gen
+            cmd = None
+            deadline = time.time() + 20
+            while cmd is None and time.time() < deadline and _State.gen == my_gen:
+                try:
+                    cmd = _State.commands.get(timeout=0.25)
+                except queue.Empty:
+                    pass
+            if cmd is not None and _State.gen != my_gen:
+                _State.commands.put(cmd)
+                cmd = None
+            if cmd is None:
                 self.send_response(204)
                 self.send_header("Access-Control-Allow-Origin", "*")
                 self.end_headers()
                 return
             body = json.dumps(cmd).encode()
-            self.send_response(200)
-            self.send_header("Content-Type", "application/json")
-            self.send_header("Access-Control-Allow-Origin", "*")
-            self.send_header("Content-Length", str(len(body)))
-            self.end_headers()
-            self.wfile.write(body)
+            try:
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json")
+                self.send_header("Access-Control-Allow-Origin", "*")
+                self.send_header("Content-Length", str(len(body)))
+                self.end_headers()
+                self.wfile.write(body)
+                self.wfile.flush()
+            except OSError:
+                _State.commands.put(cmd)  # the browser went away; give it to the next poller
         else:
             self.send_response(404)
             self.end_headers()
@@ -73,6 +89,7 @@ def ensure_server():
 
 
 def reset():
+    _State.gen += 1
     while not _State.commands.empty():
         _State.commands.get_nowait()
     _State.last_poll = 0.0
