@@ -1,0 +1,11 @@
+{
+  "name": "Zen window vibrancy and 60fps refresh-driver cap",
+  "repeat": 2,
+  "measure": 125,
+  "workloads": ["yt-1080p60-windowed", "yt-1080p24-fullscreen"],
+  "variants": [
+    {"label": "stock", "browser": "zen", "prefs": {}},
+    {"label": "vib-off", "browser": "zen", "prefs": {"zen.widget.macos.window-vibrancy": false}},
+    {"label": "fr60", "browser": "zen", "prefs": {"layout.frame_rate": 60}}
+  ]
+}

@@ -139,6 +139,38 @@ class RDP:
             data += s.recv(n - len(data))
         return json.loads(data)
 
+    def get_prefs(self, names: list[str], timeout: float = 60) -> dict:
+        s = self._connect(timeout)
+        try:
+            self._recv(s)
+            self._send(s, {"to": "root", "type": "getRoot"})
+            actor = self._recv(s)["preferenceActor"]
+            out = {}
+            for n in names:
+                for kind in ("getBoolPref", "getIntPref", "getCharPref"):
+                    self._send(s, {"to": actor, "type": kind, "value": n})
+                    m = self._recv(s)
+                    if "error" not in m:
+                        out[n] = m.get("value")
+                        break
+                else:
+                    out[n] = None
+            return out
+        finally:
+            s.close()
+
+    def _connect(self, timeout):
+        deadline = time.time() + timeout
+        while True:
+            try:
+                s = socket.create_connection(("127.0.0.1", self.port), timeout=5)
+                s.settimeout(30)
+                return s
+            except OSError:
+                if time.time() > deadline:
+                    raise
+                time.sleep(0.5)
+
     def install_temporary_addon(self, path: str, timeout: float = 60):
         deadline = time.time() + timeout
         while True:
