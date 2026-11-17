@@ -26,6 +26,15 @@ def main(path: str):
     if not ok:
         print("NOT READY:\n- " + "\n- ".join(problems))
         sys.exit(1)
+    # Warm-up: one launch per Gecko browser so background first-launch work (plugin checks,
+    # extension rule compilation) happens outside the measurements.
+    for name in sorted({v["browser"] for v in exp["variants"]} - {"safari"}):
+        b = run.browsers.make(name)
+        b.ensure_profile(extensions=tuple(exp.get("extensions", ["uBOLiteRedux@raymondhill.net"])))
+        b.launch()
+        b.navigate("https://www.youtube.com/")
+        time.sleep(45)
+        b.quit()
     start = time.strftime("%Y%m%d-%H%M%S")
     exts = tuple(exp.get("extensions", ["uBOLiteRedux@raymondhill.net"]))
     for i in range(exp.get("repeat", 2)):

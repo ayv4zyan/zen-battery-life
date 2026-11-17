@@ -1,0 +1,12 @@
+{
+  "name": "Zen window vibrancy, isolated (prefs.js scrubbed per launch)",
+  "repeat": 2,
+  "measure": 125,
+  "workloads": ["yt-1080p60-windowed"],
+  "variants": [
+    {"label": "stock", "browser": "zen", "prefs": {}},
+    {"label": "vib-off", "browser": "zen", "prefs": {"zen.widget.macos.window-vibrancy": false}},
+    {"label": "material-0", "browser": "zen", "prefs": {"zen.widget.macos.window-material": 0}},
+    {"label": "stock", "browser": "firefox", "prefs": {}}
+  ]
+}

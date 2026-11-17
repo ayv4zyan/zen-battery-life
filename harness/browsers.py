@@ -85,8 +85,29 @@ class GeckoBrowser:
         "devtools.debugger.prompt-connection": False,
     }
 
+    # Prefs that experiments may set. They are stripped from the stored prefs.js before every
+    # launch, so a variant's settings can never leak into the next run (user.js only *sets* keys).
+    TUNABLE_PREFIXES = ("zen.widget.macos.", "layout.frame_rate", "gfx.", "layers.", "media.",
+                        "widget.", "full-screen-api.", "dom.", "browser.tabs.unload", "image.",
+                        "apz.", "general.smoothScroll", "toolkit.cosmeticAnimations", "zen.view.",
+                        "zen.theme.", "ui.", "layout.")
+
+    def _scrub_prefs_js(self):
+        p = self.profile / "prefs.js"
+        if not p.exists():
+            return
+        keep = []
+        for line in p.read_text().splitlines():
+            if line.startswith('user_pref("'):
+                key = line[len('user_pref("'):].split('"', 1)[0]
+                if key.startswith(self.TUNABLE_PREFIXES) and not key.startswith(("media.gmp", "gfx.blacklist")):
+                    continue
+            keep.append(line)
+        p.write_text("\n".join(keep) + "\n")
+
     def ensure_profile(self, prefs_overlay: dict | None = None, extensions: tuple[str, ...] = ()):
         self.profile.mkdir(parents=True, exist_ok=True)
+        self._scrub_prefs_js()
         prefs = {**self.BASE_PREFS, **self.extra_prefs, **(prefs_overlay or {})}
         lines = [f'user_pref({json.dumps(k)}, {json.dumps(v)});' for k, v in prefs.items()]
         (self.profile / "user.js").write_text("\n".join(lines) + "\n")

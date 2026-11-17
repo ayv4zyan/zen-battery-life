@@ -1,0 +1,19 @@
+[1] stock            zen      yt-1080p60-windowed      FAILED video not playing through window: state=3 played=9s
+[1] vib-off          zen      yt-1080p60-windowed      system  5.09 W  chip  0.56 W (cpu 0.24 gpu 0.32)  browser EI   70.9  WS cpu 268.1 ms/s
+[1] fr60             zen      yt-1080p60-windowed      system  5.00 W  chip  0.57 W (cpu 0.26 gpu 0.32)  browser EI   72.2  WS cpu 265.0 ms/s
+[1] stock            zen      yt-1080p24-fullscreen    system  4.03 W  chip  0.31 W (cpu 0.14 gpu 0.18)  browser EI   43.7  WS cpu 171.7 ms/s
+[1] vib-off          zen      yt-1080p24-fullscreen    system  4.09 W  chip  0.33 W (cpu 0.14 gpu 0.19)  browser EI   44.7  WS cpu 170.1 ms/s
+[1] fr60             zen      yt-1080p24-fullscreen    system  4.25 W  chip  0.33 W (cpu 0.14 gpu 0.19)  browser EI   46.2  WS cpu 169.6 ms/s
+[2] stock            zen      yt-1080p60-windowed      system  4.88 W  chip  0.54 W (cpu 0.22 gpu 0.32)  browser EI   64.7  WS cpu 281.0 ms/s
+[2] vib-off          zen      yt-1080p60-windowed      system  4.83 W  chip  0.55 W (cpu 0.23 gpu 0.32)  browser EI   67.4  WS cpu 276.4 ms/s
+[2] fr60             zen      yt-1080p60-windowed      system  4.74 W  chip  0.51 W (cpu 0.21 gpu 0.30)  browser EI   65.6  WS cpu 255.4 ms/s
+[2] stock            zen      yt-1080p24-fullscreen    system  4.06 W  chip  0.33 W (cpu 0.14 gpu 0.19)  browser EI   45.0  WS cpu 169.9 ms/s
+[2] vib-off          zen      yt-1080p24-fullscreen    system  4.17 W  chip  0.34 W (cpu 0.15 gpu 0.19)  browser EI   59.9  WS cpu 171.5 ms/s
+[2] fr60             zen      yt-1080p24-fullscreen    system  4.07 W  chip  0.33 W (cpu 0.14 gpu 0.19)  browser EI   47.0  WS cpu 169.8 ms/s
+
+yt-1080p24-fullscreen    zen      fr60             n=2 system 4.16 W  chip 0.33 W (cpu 0.14 gpu 0.19)  WS 170 ms/s
+yt-1080p24-fullscreen    zen      stock            n=2 system 4.04 W  chip 0.32 W (cpu 0.14 gpu 0.18)  WS 171 ms/s
+yt-1080p24-fullscreen    zen      vib-off          n=2 system 4.13 W  chip 0.34 W (cpu 0.14 gpu 0.19)  WS 171 ms/s
+yt-1080p60-windowed      zen      fr60             n=2 system 4.87 W  chip 0.54 W (cpu 0.23 gpu 0.31)  WS 260 ms/s
+yt-1080p60-windowed      zen      stock            n=1 system 4.88 W  chip 0.54 W (cpu 0.22 gpu 0.32)  WS 281 ms/s
+yt-1080p60-windowed      zen      vib-off          n=2 system 4.96 W  chip 0.55 W (cpu 0.24 gpu 0.32)  WS 272 ms/s
