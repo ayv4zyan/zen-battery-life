@@ -82,7 +82,7 @@ def _background_audio():
     return {"setup": setup, "verify": lambda b: {"front": b.js("return location.href")}, "during": None}
 
 
-def _scroll(url: str, flick_px: int = 1400, interval_s: float = 1.6):
+def _scroll(url: str, flick_px: int = 1000, interval_s: float = 1.6, period: int = 20):
     def setup(b):
         b.navigate(url)
         time.sleep(5)
@@ -92,12 +92,42 @@ def _scroll(url: str, flick_px: int = 1400, interval_s: float = 1.6):
         return {"url": url}
 
     def during(b):
-        return inputctl.ev_background("scroll", str(MEASURE_S), str(flick_px), str(interval_s))
+        return inputctl.ev_background("scroll", str(MEASURE_S), str(flick_px), str(interval_s), str(period))
 
     def verify(b):
         return {"scrollY": b.js("return Math.round(window.scrollY)")}
 
     return {"setup": setup, "verify": verify, "during": during}
+
+
+# Mirrors the user's Real session (11 tabs, read from sessionstore by host only). Signed out except
+# where the test profile has a login. Video pages are left out of the background set so nothing plays.
+IDLE_TABS = [
+    "https://www.youtube.com/",
+    "https://www.youtube.com/feed/trending",
+    "https://chatgpt.com/",
+    "https://x.com/home",
+    "https://claude.dev/",
+    "https://www.amazon.com/",
+    "https://www.bbc.com/news",
+    "https://github.com/",
+    "https://en.wikipedia.org/wiki/Battery",
+    "https://chatgpt.com/",  # front tab: the user's most common non-video tab
+]
+
+
+def _idle_tabs():
+    def setup(b):
+        b.navigate(IDLE_TABS[0])
+        for u in IDLE_TABS[1:]:
+            b.new_tab(u)
+            time.sleep(1)
+        b.focus()
+        browsers.mouse_park()
+        time.sleep(25)  # let pages settle before warmup
+        return {"tabs": len(IDLE_TABS)}
+
+    return {"setup": setup, "verify": lambda b: {"front": b.js("return location.host")}, "during": None}
 
 
 def _idle_system():
@@ -114,8 +144,9 @@ WORKLOADS = {
     "yt-1080p24-fullscreen-reveal": _youtube("sintel", "hd1080", True, reveal_menubar=True),
     "yt-1080p60-fullscreen-reveal": _youtube("bbb60", "hd1080", True, reveal_menubar=True),
     "yt-background-audio": _background_audio(),
+    "idle-tabs": _idle_tabs(),
     "article-scroll": _scroll("https://en.wikipedia.org/wiki/History_of_the_United_States"),
-    "x-scroll": _scroll("https://x.com/home", flick_px=1600, interval_s=2.0),
+    "x-scroll": _scroll("https://x.com/home", flick_px=1200, interval_s=2.0, period=0),
 }
 
 

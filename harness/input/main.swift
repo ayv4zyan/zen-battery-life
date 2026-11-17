@@ -88,7 +88,7 @@ func flick(deltaPx: Double) {
     // Momentum phase: exponential decay, like AppKit's.
     var v = (deltaPx - fingerTotal) * (1 - 0.95)
     scrollEvent(Int32(v.rounded()), phase: 0, momentum: 1)  // momentum begin
-    while v >= 0.5 {
+    while abs(v) >= 0.5 {
         v *= 0.95
         scrollEvent(Int32(v.rounded()), phase: 0, momentum: 2)  // continue
         usleep(frame)
@@ -177,12 +177,17 @@ case "click":
 case "flick":
     flick(deltaPx: Double(args[1])!)
 case "scroll":
-    // scroll SECONDS PX INTERVAL: repeated flicks of PX every INTERVAL seconds.
+    // scroll SECONDS PX INTERVAL [PERIOD]: repeated flicks of PX every INTERVAL seconds. With PERIOD,
+    // direction reverses every PERIOD flicks (down, then back up), so long runs never hit the page end.
     let total = Double(args[1])!, px = Double(args[2])!, interval = Double(args[3])!
+    let period = args.count > 4 ? Int(args[4])! : 0
     let start = Date()
+    var n = 0
     while Date().timeIntervalSince(start) < total {
         let t0 = Date()
-        flick(deltaPx: px)
+        let dir: Double = (period > 0 && (n / period) % 2 == 1) ? -1 : 1
+        flick(deltaPx: px * dir)
+        n += 1
         let rest = interval - Date().timeIntervalSince(t0)
         if rest > 0 { usleep(useconds_t(rest * 1_000_000)) }
     }

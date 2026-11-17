@@ -1,0 +1,12 @@
+{
+  "name": "Breadth baseline: background audio, idle tabs, article scrolling",
+  "repeat": 2,
+  "measure": 125,
+  "workloads": ["yt-background-audio", "idle-tabs", "article-scroll"],
+  "variants": [
+    {"label": "stock", "browser": "safari", "prefs": {}},
+    {"label": "stock", "browser": "firefox", "prefs": {}},
+    {"label": "stock", "browser": "zen", "prefs": {}},
+    {"label": "vib-off", "browser": "zen", "prefs": {"zen.widget.macos.window-vibrancy": false}}
+  ]
+}

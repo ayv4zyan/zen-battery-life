@@ -1,0 +1,19 @@
+[1] stock            safari   yt-1080p24-fullscreen    system  4.40 W  chip  0.19 W (cpu 0.09 gpu 0.11)  browser EI   26.9  WS cpu  92.4 ms/s
+[1] stock            firefox  yt-1080p24-fullscreen    system  4.60 W  chip  0.35 W (cpu 0.16 gpu 0.19)  browser EI   62.9  WS cpu 176.1 ms/s
+[1] stock            zen      yt-1080p24-fullscreen    system  4.39 W  chip  0.33 W (cpu 0.15 gpu 0.18)  browser EI   49.0  WS cpu 176.9 ms/s
+[1] stock            safari   yt-1080p24-fullscreen-reveal system  4.41 W  chip  0.20 W (cpu 0.10 gpu 0.10)  browser EI   30.2  WS cpu  92.2 ms/s
+[1] stock            firefox  yt-1080p24-fullscreen-reveal system  3.96 W  chip  0.33 W (cpu 0.15 gpu 0.18)  browser EI   49.9  WS cpu 176.1 ms/s
+[1] stock            zen      yt-1080p24-fullscreen-reveal system  4.17 W  chip  0.33 W (cpu 0.14 gpu 0.19)  browser EI   49.7  WS cpu 174.7 ms/s
+[2] stock            safari   yt-1080p24-fullscreen    system  4.24 W  chip  0.20 W (cpu 0.09 gpu 0.10)  browser EI   29.1  WS cpu  91.8 ms/s
+[2] stock            firefox  yt-1080p24-fullscreen    system  4.87 W  chip  0.35 W (cpu 0.16 gpu 0.19)  browser EI   51.0  WS cpu 175.7 ms/s
+[2] stock            zen      yt-1080p24-fullscreen    system  4.36 W  chip  0.32 W (cpu 0.15 gpu 0.18)  browser EI   50.2  WS cpu 176.8 ms/s
+[2] stock            safari   yt-1080p24-fullscreen-reveal system  3.99 W  chip  0.19 W (cpu 0.09 gpu 0.10)  browser EI   28.8  WS cpu  93.0 ms/s
+[2] stock            firefox  yt-1080p24-fullscreen-reveal system  4.79 W  chip  0.33 W (cpu 0.15 gpu 0.18)  browser EI   50.7  WS cpu 175.2 ms/s
+[2] stock            zen      yt-1080p24-fullscreen-reveal system  4.48 W  chip  0.32 W (cpu 0.14 gpu 0.17)  browser EI   48.7  WS cpu 175.2 ms/s
+
+yt-1080p24-fullscreen    firefox  stock            n=2 system 4.74 W  chip 0.35 W (cpu 0.16 gpu 0.19)  WS 176 ms/s
+yt-1080p24-fullscreen    safari   stock            n=2 system 4.32 W  chip 0.20 W (cpu 0.09 gpu 0.10)  WS 92 ms/s
+yt-1080p24-fullscreen    zen      stock            n=2 system 4.38 W  chip 0.32 W (cpu 0.15 gpu 0.18)  WS 177 ms/s
+yt-1080p24-fullscreen-reveal firefox  stock            n=2 system 4.38 W  chip 0.33 W (cpu 0.15 gpu 0.18)  WS 176 ms/s
+yt-1080p24-fullscreen-reveal safari   stock            n=2 system 4.20 W  chip 0.20 W (cpu 0.10 gpu 0.10)  WS 93 ms/s
+yt-1080p24-fullscreen-reveal zen      stock            n=2 system 4.33 W  chip 0.32 W (cpu 0.14 gpu 0.18)  WS 175 ms/s
