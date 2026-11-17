@@ -1,0 +1,6 @@
+profiles.noindex/
+results/raw.noindex/
+*.xpi
+__pycache__/
+bin/
+.DS_Store

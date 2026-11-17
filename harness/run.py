@@ -1,0 +1,198 @@
+"""Run Workloads and record Power cost.
+
+  python3 harness/run.py --browsers safari,firefox,zen --workloads yt-1080p60-windowed --repeat 3 --label stock
+
+Runs are interleaved (A B C, A B C, ...) so slow drift (battery level, temperature) spreads evenly.
+Each run: fresh browser launch -> Workload setup -> warmup -> recording -> verification -> quit.
+Every run appends one line to results/runs.jsonl; raw data goes to results/raw.noindex/.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import subprocess
+import sys
+import time
+from datetime import datetime
+from pathlib import Path
+
+import browsers
+import power
+import preflight
+import yt
+
+ROOT = Path(__file__).resolve().parent.parent
+RAW = ROOT / "results" / "raw.noindex"
+RUNS = ROOT / "results" / "runs.jsonl"
+INPUT = str(ROOT / "bin" / "mfga-input")
+
+WARMUP_S = 20
+MEASURE_S = 150
+COOLDOWN_S = 15
+
+
+# ---------------- Workloads ----------------
+# Each workload: setup(b) puts the browser in the measured state; during(b) optionally drives input
+# while recording (returns a Popen or None); verify(b) returns facts checked after recording.
+
+def _youtube(video: str, quality: str, fullscreen: bool):
+    def setup(b):
+        b.navigate(yt.watch_url(video))
+        yt.wait_ready(b)
+        yt.set_quality(b, quality)
+        time.sleep(2)
+        b.focus()
+        s = yt.state(b)
+        if s.get("paused"):
+            browsers.real_key("k")
+            time.sleep(1)
+        if fullscreen:
+            browsers.real_key("f")
+            time.sleep(4)
+        browsers.mouse_park()
+        s = yt.state(b)
+        if s.get("paused") or s.get("state") != 1:
+            raise RuntimeError(f"video not playing: {s}")
+        if fullscreen and not s.get("fullscreen"):
+            raise RuntimeError("fullscreen did not engage")
+        return s
+
+    def verify(b):
+        return yt.state(b)
+
+    return {"setup": setup, "verify": verify, "during": None}
+
+
+def _background_audio():
+    def setup(b):
+        b.navigate(yt.watch_url("sintel"))
+        yt.wait_ready(b)
+        yt.set_quality(b, "hd1080")
+        b.focus()
+        if yt.state(b).get("paused"):
+            browsers.real_key("k")
+        time.sleep(2)
+        b.new_tab("https://example.com/")
+        browsers.mouse_park()
+        return {"note": "video in background tab, example.com in front"}
+
+    return {"setup": setup, "verify": lambda b: {"front": b.js("return location.href")}, "during": None}
+
+
+def _scroll(url: str, flick_px: int = 1400, interval_s: float = 1.6):
+    def setup(b):
+        b.navigate(url)
+        time.sleep(5)
+        b.focus()
+        # Pointer over the content column so scroll events target the page.
+        subprocess.run([INPUT, "move", "756", "520"], check=True)
+        return {"url": url}
+
+    def during(b):
+        return subprocess.Popen([INPUT, "scroll", str(MEASURE_S), str(flick_px), str(interval_s)])
+
+    def verify(b):
+        return {"scrollY": b.js("return Math.round(window.scrollY)")}
+
+    return {"setup": setup, "verify": verify, "during": during}
+
+
+def _idle_system():
+    return {"setup": None, "verify": None, "during": None, "no_browser": True}
+
+
+WORKLOADS = {
+    "idle-system": _idle_system(),
+    "yt-1080p60-windowed": _youtube("bbb60", "hd1080", False),
+    "yt-1080p60-fullscreen": _youtube("bbb60", "hd1080", True),
+    "yt-1080p24-windowed": _youtube("sintel", "hd1080", False),
+    "yt-1080p24-fullscreen": _youtube("sintel", "hd1080", True),
+    "yt-4k60-fullscreen": _youtube("bbb60", "hd2160", True),
+    "yt-background-audio": _background_audio(),
+    "article-scroll": _scroll("https://en.wikipedia.org/wiki/History_of_the_United_States"),
+    "x-scroll": _scroll("https://x.com/home", flick_px=1600, interval_s=2.0),
+}
+
+
+# ---------------- Runner ----------------
+
+def run_one(browser_name: str, workload: str, label: str, prefs: dict | None, extensions: tuple[str, ...]) -> dict:
+    wl = WORKLOADS[workload]
+    stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    out_dir = RAW / f"{stamp}_{browser_name}_{workload}_{label}"
+    b = None
+    rec_info: dict = {"browser": browser_name, "workload": workload, "label": label, "stamp": stamp,
+                      "prefs": prefs or {}, "extensions": list(extensions)}
+    try:
+        if not wl.get("no_browser"):
+            b = browsers.make(browser_name)
+            if hasattr(b, "ensure_profile"):
+                b.ensure_profile(prefs_overlay=prefs, extensions=extensions)
+            b.launch()
+            rec_info["setup"] = wl["setup"](b)
+        time.sleep(WARMUP_S)
+        rec = power.PowerRecorder(MEASURE_S, out_dir)
+        rec.start()
+        driver = wl["during"](b) if wl.get("during") else None
+        r = rec.wait()
+        if driver:
+            driver.wait(timeout=30)
+        if wl.get("verify"):
+            rec_info["verify"] = wl["verify"](b)
+        rec_info["summary"] = power.summarize(r, None if wl.get("no_browser") else browser_name)
+        rec_info["ok"] = True
+    except Exception as e:  # noqa: BLE001
+        rec_info["ok"] = False
+        rec_info["error"] = repr(e)
+    finally:
+        if b:
+            b.quit()
+    rec_info["conditions_after"] = preflight.conditions()
+    out_dir.mkdir(parents=True, exist_ok=True)
+    (out_dir / "run.json").write_text(json.dumps(rec_info, indent=1, default=str))
+    RUNS.parent.mkdir(parents=True, exist_ok=True)
+    slim = {k: v for k, v in rec_info.items() if k != "conditions_after"}
+    if "summary" in slim:
+        slim["summary"] = {k: v for k, v in slim["summary"].items() if k != "top_processes"}
+    with RUNS.open("a") as f:
+        f.write(json.dumps(slim, default=str) + "\n")
+    return rec_info
+
+
+def fmt(r: dict) -> str:
+    if not r.get("ok"):
+        return f"{r['browser']:8} {r['workload']:24} FAILED {r.get('error')}"
+    s = r["summary"]
+    sysw = f"{s['system_mw'] / 1000:5.2f} W" if s.get("system_mw") else "  n/a  "
+    return (f"{r['browser']:8} {r['workload']:24} system {sysw}  chip {s['combined_mw'] / 1000:5.2f} W "
+            f"(cpu {s['cpu_mw'] / 1000:4.2f} gpu {s['gpu_mw'] / 1000:4.2f})  "
+            f"browser EI {s.get('browser_energy_impact', 0):6.1f}  WS cpu {s.get('windowserver_cpu_ms_per_s') or 0:5.1f} ms/s")
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--browsers", default="safari,firefox,zen")
+    ap.add_argument("--workloads", required=True)
+    ap.add_argument("--repeat", type=int, default=3)
+    ap.add_argument("--label", default="stock")
+    ap.add_argument("--prefs", default="{}", help="JSON prefs overlay for Firefox/Zen")
+    ap.add_argument("--extensions", default="uBOLiteRedux@raymondhill.net")
+    ap.add_argument("--allow-plugged", action="store_true")
+    a = ap.parse_args()
+
+    ok, problems, _ = preflight.check(require_battery=not a.allow_plugged)
+    if not ok:
+        print("NOT READY:\n- " + "\n- ".join(problems))
+        sys.exit(1)
+    prefs = json.loads(a.prefs)
+    exts = tuple(x for x in a.extensions.split(",") if x)
+    for i in range(a.repeat):
+        for wl in a.workloads.split(","):
+            for br in a.browsers.split(","):
+                r = run_one(br, wl, a.label, prefs, exts)
+                print(f"[{i + 1}/{a.repeat}] {fmt(r)}", flush=True)
+                time.sleep(COOLDOWN_S)
+
+
+if __name__ == "__main__":
+    main()
