@@ -1,0 +1,11 @@
+{
+  "name": "Bug 1941693: does revealing the fullscreen menu bar once unlock low-power video?",
+  "repeat": 2,
+  "measure": 125,
+  "workloads": ["yt-1080p24-fullscreen", "yt-1080p24-fullscreen-reveal"],
+  "variants": [
+    {"label": "stock", "browser": "safari", "prefs": {}},
+    {"label": "stock", "browser": "firefox", "prefs": {}},
+    {"label": "stock", "browser": "zen", "prefs": {}}
+  ]
+}

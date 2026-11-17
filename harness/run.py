@@ -35,7 +35,7 @@ COOLDOWN_S = 15
 # Each workload: setup(b) puts the browser in the measured state; during(b) optionally drives input
 # while recording (returns a Popen or None); verify(b) returns facts checked after recording.
 
-def _youtube(video: str, quality: str, fullscreen: bool):
+def _youtube(video: str, quality: str, fullscreen: bool, reveal_menubar: bool = False):
     def setup(b):
         b.navigate(yt.watch_url(video))
         yt.wait_ready(b)
@@ -46,6 +46,13 @@ def _youtube(video: str, quality: str, fullscreen: bool):
         if fullscreen:
             yt.enter_fullscreen(b)
             time.sleep(4)
+            if reveal_menubar:
+                # Bug 1941693: Gecko reportedly only reaches macOS "detached" low-power video
+                # after the fullscreen titlebar/menu bar has been revealed once.
+                inputctl.ev("move", "756", "1")
+                time.sleep(4)
+                inputctl.ev("move", "756", "500")
+                time.sleep(3)
         browsers.mouse_park()
         s = yt.state(b)
         if s.get("paused") or s.get("state") != 1:
@@ -104,6 +111,8 @@ WORKLOADS = {
     "yt-1080p24-windowed": _youtube("sintel", "hd1080", False),
     "yt-1080p24-fullscreen": _youtube("sintel", "hd1080", True),
     "yt-4k60-fullscreen": _youtube("bbb60", "hd2160", True),
+    "yt-1080p24-fullscreen-reveal": _youtube("sintel", "hd1080", True, reveal_menubar=True),
+    "yt-1080p60-fullscreen-reveal": _youtube("bbb60", "hd1080", True, reveal_menubar=True),
     "yt-background-audio": _background_audio(),
     "article-scroll": _scroll("https://en.wikipedia.org/wiki/History_of_the_United_States"),
     "x-scroll": _scroll("https://x.com/home", flick_px=1600, interval_s=2.0),

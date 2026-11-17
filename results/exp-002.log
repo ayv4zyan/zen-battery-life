@@ -1,0 +1,13 @@
+[1] stock            zen      yt-1080p60-windowed      system  7.34 W  chip  1.33 W (cpu 0.69 gpu 0.63)  browser EI   83.6  WS cpu 120.0 ms/s
+[1] vib-off          zen      yt-1080p60-windowed      system  4.91 W  chip  0.56 W (cpu 0.24 gpu 0.32)  browser EI   71.0  WS cpu 269.4 ms/s
+[1] material-0       zen      yt-1080p60-windowed      system  6.58 W  chip  1.32 W (cpu 0.68 gpu 0.64)  browser EI   84.6  WS cpu 122.2 ms/s
+[1] stock            firefox  yt-1080p60-windowed      system  4.98 W  chip  0.49 W (cpu 0.20 gpu 0.29)  browser EI   66.1  WS cpu 271.6 ms/s
+[2] stock            zen      yt-1080p60-windowed      system  6.47 W  chip  1.31 W (cpu 0.68 gpu 0.63)  browser EI   81.3  WS cpu 120.8 ms/s
+[2] vib-off          zen      yt-1080p60-windowed      system  4.83 W  chip  0.56 W (cpu 0.24 gpu 0.32)  browser EI   71.4  WS cpu 266.8 ms/s
+[2] material-0       zen      yt-1080p60-windowed      system  6.50 W  chip  1.33 W (cpu 0.72 gpu 0.62)  browser EI   81.6  WS cpu 116.3 ms/s
+[2] stock            firefox  yt-1080p60-windowed      system  5.42 W  chip  0.49 W (cpu 0.20 gpu 0.29)  browser EI   67.1  WS cpu 271.2 ms/s
+
+yt-1080p60-windowed      firefox  stock            n=2 system 5.20 W  chip 0.49 W (cpu 0.20 gpu 0.29)  WS 271 ms/s
+yt-1080p60-windowed      zen      material-0       n=2 system 6.54 W  chip 1.33 W (cpu 0.70 gpu 0.63)  WS 119 ms/s
+yt-1080p60-windowed      zen      stock            n=2 system 6.91 W  chip 1.32 W (cpu 0.69 gpu 0.63)  WS 120 ms/s
+yt-1080p60-windowed      zen      vib-off          n=2 system 4.87 W  chip 0.56 W (cpu 0.24 gpu 0.32)  WS 268 ms/s
