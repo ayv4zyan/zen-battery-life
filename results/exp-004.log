@@ -1,0 +1,37 @@
+[1] stock            safari   yt-background-audio      system  4.21 W  chip  0.06 W (cpu 0.06 gpu 0.00)  browser EI   11.3  WS cpu   5.1 ms/s
+[1] stock            firefox  yt-background-audio      system  3.32 W  chip  0.07 W (cpu 0.07 gpu 0.00)  browser EI   23.9  WS cpu   5.5 ms/s
+[1] stock            zen      yt-background-audio      system  4.07 W  chip  0.27 W (cpu 0.15 gpu 0.12)  browser EI   45.9  WS cpu 314.6 ms/s
+[1] vib-off          zen      yt-background-audio      system  3.80 W  chip  0.18 W (cpu 0.14 gpu 0.04)  browser EI   45.7  WS cpu 262.8 ms/s
+[1] stock            safari   idle-tabs                system  2.14 W  chip  0.07 W (cpu 0.07 gpu 0.00)  browser EI   11.1  WS cpu 102.4 ms/s
+[1] stock            firefox  idle-tabs                system  1.97 W  chip  0.04 W (cpu 0.04 gpu 0.00)  browser EI    7.5  WS cpu   5.0 ms/s
+[1] stock            zen      idle-tabs                system  1.98 W  chip  0.06 W (cpu 0.06 gpu 0.00)  browser EI   32.3  WS cpu   5.1 ms/s
+[1] vib-off          zen      idle-tabs                system  1.99 W  chip  0.05 W (cpu 0.05 gpu 0.00)  browser EI   16.2  WS cpu   5.1 ms/s
+[1] stock            safari   article-scroll           system  4.88 W  chip  0.19 W (cpu 0.10 gpu 0.09)  browser EI   20.0  WS cpu 273.6 ms/s
+[1] stock            firefox  article-scroll           system  4.90 W  chip  0.37 W (cpu 0.17 gpu 0.20)  browser EI   60.9  WS cpu 272.7 ms/s
+[1] stock            zen      article-scroll           system  6.27 W  chip  1.09 W (cpu 0.35 gpu 0.74)  browser EI   90.8  WS cpu 248.2 ms/s
+[1] vib-off          zen      article-scroll           system  4.82 W  chip  0.42 W (cpu 0.17 gpu 0.25)  browser EI   56.0  WS cpu 261.7 ms/s
+[2] stock            safari   yt-background-audio      system  2.79 W  chip  0.06 W (cpu 0.06 gpu 0.00)  browser EI   15.1  WS cpu   5.2 ms/s
+[2] stock            firefox  yt-background-audio      system  2.71 W  chip  0.07 W (cpu 0.07 gpu 0.00)  browser EI   21.1  WS cpu   5.5 ms/s
+[2] stock            zen      yt-background-audio      system  4.18 W  chip  0.27 W (cpu 0.15 gpu 0.12)  browser EI   47.2  WS cpu 315.8 ms/s
+[2] vib-off          zen      yt-background-audio      system  3.77 W  chip  0.18 W (cpu 0.14 gpu 0.04)  browser EI   44.2  WS cpu 264.6 ms/s
+[2] stock            safari   idle-tabs                system  2.07 W  chip  0.07 W (cpu 0.07 gpu 0.00)  browser EI    9.4  WS cpu 101.5 ms/s
+[2] stock            firefox  idle-tabs                system  2.13 W  chip  0.05 W (cpu 0.05 gpu 0.00)  browser EI   14.2  WS cpu   5.1 ms/s
+[2] stock            zen      idle-tabs                system  1.99 W  chip  0.05 W (cpu 0.05 gpu 0.00)  browser EI   13.3  WS cpu   5.2 ms/s
+[2] vib-off          zen      idle-tabs                system  2.13 W  chip  0.05 W (cpu 0.05 gpu 0.00)  browser EI   12.2  WS cpu   5.2 ms/s
+[2] stock            safari   article-scroll           system  4.99 W  chip  0.19 W (cpu 0.10 gpu 0.09)  browser EI   19.6  WS cpu 271.9 ms/s
+[2] stock            firefox  article-scroll           system  4.88 W  chip  0.37 W (cpu 0.17 gpu 0.20)  browser EI   58.9  WS cpu 272.1 ms/s
+[2] stock            zen      article-scroll           system  6.21 W  chip  1.06 W (cpu 0.34 gpu 0.72)  browser EI   85.7  WS cpu 246.2 ms/s
+[2] vib-off          zen      article-scroll           system  4.87 W  chip  0.42 W (cpu 0.17 gpu 0.24)  browser EI   54.5  WS cpu 259.8 ms/s
+
+article-scroll           firefox  stock            n=2 system 4.89 W  chip 0.37 W (cpu 0.17 gpu 0.20)  WS 272 ms/s
+article-scroll           safari   stock            n=2 system 4.93 W  chip 0.19 W (cpu 0.10 gpu 0.09)  WS 273 ms/s
+article-scroll           zen      stock            n=2 system 6.24 W  chip 1.08 W (cpu 0.35 gpu 0.73)  WS 247 ms/s
+article-scroll           zen      vib-off          n=2 system 4.85 W  chip 0.42 W (cpu 0.17 gpu 0.25)  WS 261 ms/s
+idle-tabs                firefox  stock            n=2 system 2.05 W  chip 0.05 W (cpu 0.05 gpu 0.00)  WS 5 ms/s
+idle-tabs                safari   stock            n=2 system 2.11 W  chip 0.07 W (cpu 0.07 gpu 0.00)  WS 102 ms/s
+idle-tabs                zen      stock            n=2 system 1.99 W  chip 0.06 W (cpu 0.06 gpu 0.00)  WS 5 ms/s
+idle-tabs                zen      vib-off          n=2 system 2.06 W  chip 0.05 W (cpu 0.05 gpu 0.00)  WS 5 ms/s
+yt-background-audio      firefox  stock            n=2 system 3.02 W  chip 0.07 W (cpu 0.07 gpu 0.00)  WS 5 ms/s
+yt-background-audio      safari   stock            n=2 system 3.50 W  chip 0.06 W (cpu 0.06 gpu 0.00)  WS 5 ms/s
+yt-background-audio      zen      stock            n=2 system 4.13 W  chip 0.27 W (cpu 0.15 gpu 0.12)  WS 315 ms/s
+yt-background-audio      zen      vib-off          n=2 system 3.78 W  chip 0.18 W (cpu 0.14 gpu 0.04)  WS 264 ms/s
