@@ -53,7 +53,8 @@ def check(require_battery: bool = True) -> tuple[bool, list[str], dict]:
         problems.append(f"quit these first: {', '.join(c['running_browsers'])}")
     if REF.exists():
         ref = json.loads(REF.read_text())
-        if abs(ref["brightness"] - c["brightness"]) > 0.01:
+        # On AC macOS undims the panel ("slightly dim on battery"); AC runs compare chip power only.
+        if abs(ref["brightness"] - c["brightness"]) > 0.01 and require_battery:
             problems.append(f"brightness is {c['brightness']:.3f}, reference is {ref['brightness']:.3f}")
         if ref.get("volume") != c["volume"] or ref.get("muted") != c["muted"]:
             problems.append(f"volume is {c['volume']} (muted={c['muted']}), reference is "
