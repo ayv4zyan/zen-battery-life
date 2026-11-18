@@ -105,6 +105,26 @@ Layer dump (`harness/layerdump.py`, pref `gfx.webrender.debug.dump-native-layer-
 - AC chip numbers run higher than on battery (article scroll 0.56 vs 0.42 W in exp 004); compare within an experiment only.
 - X scrolling was invalid in this experiment: see Method notes.
 
+## 7. Confirmation on battery: all fixes vs stock Zen vs Safari (exp 008, n=2, 100→89%)
+
+"Final" = `zen.widget.macos.window-vibrancy=false` + userChrome (media notes hidden) + userContent (YouTube Ambient mode hidden), uBO Lite.
+
+| Workload | Safari system | Zen stock | Zen final | final ×Safari | chip: Safari / stock / final |
+|---|---|---|---|---|---|
+| YouTube 1080p24 fullscreen | 5.20 W | 5.30 W | 3.55 W | **0.68** | 0.24 / 0.36 / 0.15 W |
+| YouTube 1080p60 fullscreen | 5.20 W | 5.51 W | 4.69 W | **0.90** | 0.34 / 0.40 / 0.20 W |
+| YouTube 1080p60 windowed | 5.92 W | 7.12 W | 4.65 W | **0.79** | 0.63 / 1.40 / 0.29 W |
+| YouTube 4K60 fullscreen | 5.04 W | 5.98 W | 5.25 W | 1.04 | 0.37 / 0.46 / 0.33 W |
+| YouTube audio, background tab | 4.06 W | 4.63 W | 3.55 W | **0.87** | 0.09 / 0.31 / 0.09 W |
+| X scrolling | 6.23 W | 9.31 W | 7.34 W | 1.18 | 1.40 / 3.90 / 2.48 W |
+| Article scrolling | 5.76 W | 6.65 W | 5.49 W | **0.95** | 0.24 / 1.18 / 0.63 W |
+| Idle, 10 tabs | 2.68 W | 2.48 W | 2.45 W | **0.91** | 0.09 / 0.12 / 0.06 W |
+
+- Parity target (≤1.2× Safari, system) met on every Workload; Stretch target (below Safari) on 6 of 8.
+- Remaining gap: X scrolling, chip 1.77× Safari. Per process (CPU ms/s): content 375 vs Safari 359 (same), but Zen GPU process 215 vs WebKit GPU 39,
+  and Zen parent 127 vs Safari 54. The compositor side, not page work. Hypothesis: Gecko composites/paints at 120 Hz on ProMotion while Safari
+  renders page updates near 60 fps by default. Next: exp 009 (`gfx.display.max-frame-rate=60`).
+
 ## Method notes (things that bit us)
 
 - Marionette sets `navigator.webdriver`, and YouTube then kills playback ~40 s in ("Something went wrong"). Firefox/Zen are driven through a small probe extension loaded over the DevTools server instead.
