@@ -92,8 +92,24 @@ Layer dump (`harness/layerdump.py`, pref `gfx.webrender.debug.dump-native-layer-
 - Upstream (Gecko): an opacity cross-fade of a canvas under a fullscreen video forces full-screen tile re-rasterisation; WebKit avoids that.
 - Needs confirmation at n≥2 on a charged battery.
 
+## 6. Extension costs in Zen (exp 007, on AC, chip power, n=2)
+
+| chip W | uBO Lite | uBlock Origin | uBO Lite + Dark Reader |
+|---|---|---|---|
+| YouTube 1080p60 windowed | 0.31 / 0.30 | 0.37 / 0.30 | 0.31 / 0.30 |
+| Article scroll | 0.58 / 0.56 | 0.73 / 0.56 | 0.59 / 0.57 |
+| Idle, 10 tabs | 0.08 / 0.12 | 0.11 / 0.08 | 0.08 / 0.07 |
+
+- uBlock Origin (full) costs the same as uBO Lite in steady state. Its first session after install was ~20% higher (filter-list compile/update); that recurs only when lists update.
+- Dark Reader: no measurable cost on these pages. Still to confirm that it was actually active in the test profile.
+- AC chip numbers run higher than on battery (article scroll 0.56 vs 0.42 W in exp 004); compare within an experiment only.
+- X scrolling was invalid in this experiment: see Method notes.
+
 ## Method notes (things that bit us)
 
 - Marionette sets `navigator.webdriver`, and YouTube then kills playback ~40 s in ("Something went wrong"). Firefox/Zen are driven through a small probe extension loaded over the DevTools server instead.
 - `user.js` only sets keys; prefs a variant set stay in `prefs.js` for later runs. The harness now strips tunable prefs from `prefs.js` before each launch.
 - The XDR panel's local dimming makes system power depend on picture content; chip power is the steadier signal, system power is what the battery sees.
+- Synthetic trackpad scrolls must start like a real trackpad (MayBegin, then Began carrying movement). A zero-delta Began makes Gecko drop
+  the whole gesture on pages whose root has `overscroll-behavior: none` (X), so every X-scroll run before e4caed5 measured an unscrolled page.
+  Scroll Workloads now count page scroll events and reject runs that did not scroll.
