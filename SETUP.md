@@ -21,7 +21,7 @@ System Settings → Displays:
 
 ## 3. Accessibility permission (for keystrokes and scrolling)
 
-System Settings → Privacy & Security → Accessibility → turn on **Claude**.
+System Settings → Privacy & Security → Accessibility → turn on **MFGA Input** (the small helper app in `harness/input/`, built by `harness/input/build.sh`).
 The scripts send real keyboard and trackpad events (like pressing `f` for YouTube fullscreen, or two-finger scrolling), so no browser needs an automation mode switched on.
 
 ## 4. Safari
