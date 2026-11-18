@@ -1,0 +1,37 @@
+[1] final+uBOL       zen      yt-1080p60-windowed      system 73.95 W  chip  0.31 W (cpu 0.20 gpu 0.11)  browser EI   53.8  WS cpu 276.2 ms/s
+[1] final+uBO        zen      yt-1080p60-windowed      system 74.03 W  chip  0.37 W (cpu 0.26 gpu 0.11)  browser EI  119.9  WS cpu 291.0 ms/s
+[1] final+uBOL+DR    zen      yt-1080p60-windowed      system 73.22 W  chip  0.31 W (cpu 0.20 gpu 0.11)  browser EI   52.6  WS cpu 288.1 ms/s
+[1] final+uBOL       zen      article-scroll           system 74.04 W  chip  0.58 W (cpu 0.24 gpu 0.34)  browser EI   65.1  WS cpu 269.7 ms/s
+[1] final+uBO        zen      article-scroll           system 74.50 W  chip  0.73 W (cpu 0.39 gpu 0.34)  browser EI  209.2  WS cpu 269.4 ms/s
+[1] final+uBOL+DR    zen      article-scroll           system 73.57 W  chip  0.59 W (cpu 0.24 gpu 0.35)  browser EI   71.0  WS cpu 266.0 ms/s
+[1] final+uBOL       zen      x-scroll                 system 73.85 W  chip  0.75 W (cpu 0.45 gpu 0.30)  browser EI  166.3  WS cpu 450.3 ms/s
+[1] final+uBO        zen      x-scroll                 system 72.24 W  chip  0.44 W (cpu 0.44 gpu 0.01)  browser EI   16.6  WS cpu  39.7 ms/s
+[1] final+uBOL+DR    zen      x-scroll                 system 73.18 W  chip  0.47 W (cpu 0.30 gpu 0.18)  browser EI   74.5  WS cpu 426.6 ms/s
+[1] final+uBOL       zen      idle-tabs                system 70.55 W  chip  0.08 W (cpu 0.07 gpu 0.01)  browser EI   15.9  WS cpu  14.8 ms/s
+[1] final+uBO        zen      idle-tabs                system 70.27 W  chip  0.11 W (cpu 0.10 gpu 0.01)  browser EI    9.0  WS cpu  17.6 ms/s
+[1] final+uBOL+DR    zen      idle-tabs                system 70.63 W  chip  0.08 W (cpu 0.07 gpu 0.01)  browser EI   13.1  WS cpu  17.9 ms/s
+[2] final+uBOL       zen      yt-1080p60-windowed      system 72.62 W  chip  0.30 W (cpu 0.19 gpu 0.11)  browser EI   49.7  WS cpu 279.8 ms/s
+[2] final+uBO        zen      yt-1080p60-windowed      system 73.17 W  chip  0.30 W (cpu 0.19 gpu 0.11)  browser EI   47.5  WS cpu 278.5 ms/s
+[2] final+uBOL+DR    zen      yt-1080p60-windowed      system 72.66 W  chip  0.30 W (cpu 0.19 gpu 0.11)  browser EI   53.4  WS cpu 275.2 ms/s
+[2] final+uBOL       zen      article-scroll           system 73.25 W  chip  0.56 W (cpu 0.22 gpu 0.34)  browser EI   62.1  WS cpu 267.8 ms/s
+[2] final+uBO        zen      article-scroll           system 73.00 W  chip  0.56 W (cpu 0.23 gpu 0.34)  browser EI   63.3  WS cpu 269.5 ms/s
+[2] final+uBOL+DR    zen      article-scroll           system  6.95 W  chip  0.57 W (cpu 0.23 gpu 0.34)  browser EI   67.2  WS cpu 269.4 ms/s
+[2] final+uBOL       zen      x-scroll                 system  5.53 W  chip  0.09 W (cpu 0.08 gpu 0.01)  browser EI   15.2  WS cpu  42.6 ms/s
+[2] final+uBO        zen      x-scroll                 system 70.25 W  chip  0.09 W (cpu 0.08 gpu 0.01)  browser EI   10.5  WS cpu  43.0 ms/s
+[2] final+uBOL+DR    zen      x-scroll                 system 72.13 W  chip  0.72 W (cpu 0.41 gpu 0.31)  browser EI   92.8  WS cpu 442.8 ms/s
+[2] final+uBOL       zen      idle-tabs                system 69.89 W  chip  0.12 W (cpu 0.11 gpu 0.01)  browser EI   25.8  WS cpu  12.0 ms/s
+[2] final+uBO        zen      idle-tabs                system 11.13 W  chip  0.08 W (cpu 0.07 gpu 0.00)  browser EI   35.6  WS cpu   9.0 ms/s
+[2] final+uBOL+DR    zen      idle-tabs                system  4.43 W  chip  0.07 W (cpu 0.07 gpu 0.00)  browser EI   19.3  WS cpu   8.6 ms/s
+
+article-scroll           zen      final+uBO        n=2 system 73.75 W  chip 0.65 W (cpu 0.31 gpu 0.34)  WS 269 ms/s
+article-scroll           zen      final+uBOL       n=2 system 73.65 W  chip 0.57 W (cpu 0.23 gpu 0.34)  WS 269 ms/s
+article-scroll           zen      final+uBOL+DR    n=2 system 40.26 W  chip 0.58 W (cpu 0.24 gpu 0.35)  WS 268 ms/s
+idle-tabs                zen      final+uBO        n=2 system 40.70 W  chip 0.09 W (cpu 0.09 gpu 0.00)  WS 13 ms/s
+idle-tabs                zen      final+uBOL       n=2 system 70.22 W  chip 0.10 W (cpu 0.09 gpu 0.01)  WS 13 ms/s
+idle-tabs                zen      final+uBOL+DR    n=2 system 37.53 W  chip 0.08 W (cpu 0.07 gpu 0.00)  WS 13 ms/s
+x-scroll                 zen      final+uBO        n=2 system 71.25 W  chip 0.27 W (cpu 0.26 gpu 0.01)  WS 41 ms/s
+x-scroll                 zen      final+uBOL       n=2 system 39.69 W  chip 0.42 W (cpu 0.27 gpu 0.15)  WS 246 ms/s
+x-scroll                 zen      final+uBOL+DR    n=2 system 72.65 W  chip 0.60 W (cpu 0.35 gpu 0.24)  WS 435 ms/s
+yt-1080p60-windowed      zen      final+uBO        n=2 system 73.60 W  chip 0.33 W (cpu 0.23 gpu 0.11)  WS 285 ms/s
+yt-1080p60-windowed      zen      final+uBOL       n=2 system 73.29 W  chip 0.31 W (cpu 0.20 gpu 0.11)  WS 278 ms/s
+yt-1080p60-windowed      zen      final+uBOL+DR    n=2 system 72.94 W  chip 0.31 W (cpu 0.20 gpu 0.11)  WS 282 ms/s

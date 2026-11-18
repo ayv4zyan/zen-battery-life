@@ -44,10 +44,13 @@ def main(path: str):
     for i in range(exp.get("repeat", 2)):
         for wl in exp["workloads"]:
             for v in exp["variants"]:
-                r = run.run_one(v["browser"], wl, v["label"], v.get("prefs"), tuple(v.get("extensions", exts)),
-                                v.get("profile"))
-                print(f"[{i + 1}] {v['label']:16} {run.fmt(r)}", flush=True)
-                time.sleep(run.COOLDOWN_S)
+                for attempt in range(2):  # one retry: a failed run (buffering, page didn't scroll) is rejected anyway
+                    r = run.run_one(v["browser"], wl, v["label"], v.get("prefs"), tuple(v.get("extensions", exts)),
+                                    v.get("profile"))
+                    print(f"[{i + 1}] {v['label']:16} {run.fmt(r)}", flush=True)
+                    time.sleep(run.COOLDOWN_S)
+                    if r.get("ok"):
+                        break
     print()
     rows = [r for r in analyze.load(None, start)]
     for t in analyze.table(rows):

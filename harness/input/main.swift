@@ -76,12 +76,15 @@ func flick(deltaPx: Double) {
     let fingerFrames = 12
     var sent = 0.0
     let fingerTotal = deltaPx * 0.35
-    scrollEvent(0, phase: 1, momentum: 0)  // kCGScrollPhaseBegan
+    // Like a real trackpad: MayBegin on touch, then Began already carrying movement. (A zero-delta
+    // Began makes Gecko drop the whole gesture on pages whose root has overscroll-behavior: none, e.g. X.)
+    scrollEvent(0, phase: 128, momentum: 0)  // kCGScrollPhaseMayBegin
+    usleep(frame)
     for i in 1...fingerFrames {
         let target = fingerTotal * Double(i) / Double(fingerFrames)
         let d = Int32((target - sent).rounded())
         sent += Double(d)
-        scrollEvent(d, phase: 2, momentum: 0)  // Changed
+        scrollEvent(d, phase: i == 1 ? 1 : 2, momentum: 0)  // Began, then Changed
         usleep(frame)
     }
     scrollEvent(0, phase: 4, momentum: 0)  // Ended

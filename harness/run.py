@@ -89,13 +89,20 @@ def _scroll(url: str, flick_px: int = 1000, interval_s: float = 1.6, period: int
         b.focus()
         # Pointer over the content column so scroll events target the page.
         inputctl.ev("move", "756", "520")
-        return {"url": url}
+        # Count scroll events (window and inner scrollers) in the DOM, visible to every browser's injector.
+        href = b.js("""
+            const el = document.documentElement; el.dataset.mfgaScroll = '0';
+            addEventListener('scroll', () => { el.dataset.mfgaScroll = String(+el.dataset.mfgaScroll + 1); },
+                             {passive: true, capture: true});
+            return location.href;""")
+        return {"url": url, "href": href}
 
     def during(b):
         return inputctl.ev_background("scroll", str(MEASURE_S), str(flick_px), str(interval_s), str(period))
 
     def verify(b):
-        return {"scrollY": b.js("return Math.round(window.scrollY)")}
+        return b.js("""return {scrollY: Math.round(window.scrollY), href: location.href,
+                               scrolls: +(document.documentElement.dataset.mfgaScroll || -1)};""")
 
     return {"setup": setup, "verify": verify, "during": during}
 
@@ -181,6 +188,10 @@ def run_one(browser_name: str, workload: str, label: str, prefs: dict | None, ex
         rec_info["summary"] = power.summarize(r, None if wl.get("no_browser") else browser_name)
         rec_info["ok"] = True
         st, vf = rec_info.get("setup") or {}, rec_info.get("verify") or {}
+        if "scrolls" in vf:  # Scroll Workloads: the page must really have scrolled, on the page we asked for
+            if vf["scrolls"] < 100 or vf.get("href") != st.get("href"):
+                rec_info["ok"] = False
+                rec_info["error"] = f"page did not scroll: scrolls={vf['scrolls']} href={vf.get('href')}"
         if "state" in vf:  # YouTube: must still be playing, and must have played through the window
             played = (vf.get("t") or 0) - (st.get("t") or 0)
             if vf.get("state") != 1 or played < MEASURE_S * 0.95:
