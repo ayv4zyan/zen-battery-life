@@ -1,0 +1,5 @@
+@-moz-document domain(youtube.com) {
+  #cinematics-container, #cinematics { display: none !important; }
+  :fullscreen, :fullscreen #movie_player, :fullscreen .html5-video-container { background: #000 !important; }
+  :fullscreen .iv-branding { display: none !important; }
+}

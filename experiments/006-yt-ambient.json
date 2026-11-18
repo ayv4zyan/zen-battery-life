@@ -1,0 +1,41 @@
+{
+ "name": "YouTube Ambient mode and black fullscreen backing (Gecko low-power video)",
+ "allow_plugged": true,
+ "repeat": 1,
+ "measure": 90,
+ "workloads": [
+  "yt-1080p24-fullscreen",
+  "yt-1080p60-fullscreen",
+  "yt-1080p60-windowed"
+ ],
+ "variants": [
+  {
+   "label": "stock",
+   "browser": "safari",
+   "prefs": {}
+  },
+  {
+   "label": "vib-off",
+   "browser": "zen",
+   "prefs": {
+    "zen.widget.macos.window-vibrancy": false
+   }
+  },
+  {
+   "label": "vib-off+no-ambient",
+   "browser": "zen",
+   "prefs": {
+    "zen.widget.macos.window-vibrancy": false,
+    "_userContent": "@-moz-document domain(youtube.com) {\n  #cinematics-container, #cinematics { display: none !important; }\n}\n"
+   }
+  },
+  {
+   "label": "vib-off+black-fs",
+   "browser": "zen",
+   "prefs": {
+    "zen.widget.macos.window-vibrancy": false,
+    "_userContent": "@-moz-document domain(youtube.com) {\n  #cinematics-container, #cinematics { display: none !important; }\n  :fullscreen, :fullscreen #movie_player, :fullscreen .html5-video-container { background: #000 !important; }\n  :fullscreen .iv-branding { display: none !important; }\n}\n"
+   }
+  }
+ ]
+}

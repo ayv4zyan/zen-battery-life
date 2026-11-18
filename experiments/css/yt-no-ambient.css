@@ -1,0 +1,3 @@
+@-moz-document domain(youtube.com) {
+  #cinematics-container, #cinematics { display: none !important; }
+}

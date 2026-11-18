@@ -111,14 +111,16 @@ class GeckoBrowser:
         self._scrub_prefs_js()
         prefs = {**self.BASE_PREFS, **self.extra_prefs, **(prefs_overlay or {})}
         # "_userChrome" is not a pref: it is CSS written to chrome/userChrome.css for this run.
-        css = prefs.pop("_userChrome", None)
-        chrome_css = self.profile / "chrome" / "userChrome.css"
-        if css:
-            chrome_css.parent.mkdir(exist_ok=True)
-            chrome_css.write_text(css + "\n")
-            prefs["toolkit.legacyUserProfileCustomizations.stylesheets"] = True
-        elif chrome_css.exists():
-            chrome_css.unlink()
+        # "_userContent" likewise goes to chrome/userContent.css (styles for web pages).
+        for key, fname in (("_userChrome", "userChrome.css"), ("_userContent", "userContent.css")):
+            css = prefs.pop(key, None)
+            f = self.profile / "chrome" / fname
+            if css:
+                f.parent.mkdir(exist_ok=True)
+                f.write_text(css + "\n")
+                prefs["toolkit.legacyUserProfileCustomizations.stylesheets"] = True
+            elif f.exists():
+                f.unlink()
         lines = [f'user_pref({json.dumps(k)}, {json.dumps(v)});' for k, v in prefs.items()]
         (self.profile / "user.js").write_text("\n".join(lines) + "\n")
         ext_dir = self.profile / "extensions"
