@@ -101,7 +101,8 @@ Layer dump (`harness/layerdump.py`, pref `gfx.webrender.debug.dump-native-layer-
 | Idle, 10 tabs | 0.08 / 0.12 | 0.11 / 0.08 | 0.08 / 0.07 |
 
 - uBlock Origin (full) costs the same as uBO Lite in steady state. Its first session after install was ~20% higher (filter-list compile/update); that recurs only when lists update.
-- Dark Reader: no measurable cost on these pages. Still to confirm that it was actually active in the test profile.
+- Dark Reader: no measurable cost on these pages. Verified active in that profile afterwards (Wikipedia rendered with
+  `data-darkreader-mode`, 30 Dark Reader style sheets, background rgb(24,26,27)).
 - AC chip numbers run higher than on battery (article scroll 0.56 vs 0.42 W in exp 004); compare within an experiment only.
 - X scrolling was invalid in this experiment: see Method notes.
 
