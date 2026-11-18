@@ -1,7 +1,7 @@
 # Findings
 
 Machine: MacBook Pro 14" M4, 16 GB, Liquid Retina XDR (ProMotion 120 Hz), macOS 15.7.
-Browsers: Safari (Reference browser), Firefox 158.0.1, Zen 1.23.4b (Gecko 158.0.1).
+Browsers: Safari 27 (Reference browser), Firefox 158.0.1, Zen 1.23.4b (Gecko 158.0.1).
 All numbers are medians of interleaved runs, on battery, brightness 0.46, output muted, Clean profiles with uBlock Origin Lite.
 "System" = whole-machine power from the battery's own accumulator (display included). "Chip" = CPU+GPU+ANE from `powermetrics`.
 
@@ -146,8 +146,33 @@ Safari already renders page content near 60 fps by default (WebKit "Prefer Page 
 - X scrolling goes from the last Workload above Safari to 0.90×. With this, Zen final is below Safari on every Workload
   measured except 4K60 fullscreen (1.04× in exp 008).
 - 60 fps video is unaffected (one stray 0.52 W windowed run in the "final" column, otherwise 0.29–0.30 W chip in both).
-- Cost: scrolling and animations in Zen look like a 60 Hz display, as they do in Safari. 120 fps content (rare) would drop frames.
+- Cost: the cap is global. Gecko's compositor runs off the same vsync, so scrolling and Zen's own UI animations also drop to 60 Hz.
+  Safari caps only page rendering; its scrolling follows the display. No Gecko pref caps pages only (checked in the Firefox source:
+  `gfx.display.max-frame-rate` and `layout.frame_rate` both act on the one global vsync dispatcher).
+- A page-only cap (content processes at 60, compositor and UI at 120, as in Safari) needs a Gecko change: thin the vsync ticks
+  only where they are forwarded to content processes (`dom/ipc/VsyncParent.cpp`). A local Zen 1.24.2b build with such a patch
+  was tried: pages ran at 60 fps while scrolling still composited every 8.3 ms, and X scrolling measured 0.92× Safari (global cap 0.88×,
+  no cap 1.02×, one run each). It is not part of this repo because it means maintaining a custom Zen build; it would make a good upstream feature.
 - `layout.frame_rate=60` (exp 001) did nothing for video; it swaps in a software timer. `gfx.display.max-frame-rate` is the one that works.
+
+## 9. ChatGPT, a reply streaming in: at parity, no fix needed (exp 010, n=2, on battery)
+
+Workload `chatgpt-stream`: signed-out chatgpt.com, one tab. An in-page loop sends the next prompt from a fixed list
+(prose + code block + table) whenever a reply finishes, so text streams through the whole window (3 replies per window).
+
+| exp 010 | system | ×Safari | chip | cpu / gpu | WindowServer | streamed |
+|---|---|---|---|---|---|---|
+| Safari | 10.20 W | | 4.39 W | 4.32 / 0.07 W | 132 ms/s | 307–333 chars/s |
+| Zen stock | 9.46 W | **0.93** | 4.20 W | 4.09 / 0.11 W | 99 ms/s | 260–318 chars/s |
+| Zen final + 60 fps | 9.62 W | **0.94** | 4.53 W | 4.49 / 0.03 W | 55 ms/s | 243–322 chars/s |
+
+- Parity target met with or without the fixes. Chip is 0.96–1.03× Safari, within run-to-run spread.
+- This is the most expensive Workload measured (~4.4 W chip in both browsers), and it is almost all page CPU work
+  (the page's content process uses 760–940 ms/s of CPU in both browsers, i.e. nearly one core). Browser compositing is a small share, so vibrancy and the 60 fps cap
+  only show in WindowServer (99 → 55 ms/s), not in system power.
+- A first 40 s smoke run showed Zen at 1.38× Safari chip. It did not hold up at 125 s, n=2.
+- Stream speed varies between runs (243–333 chars/s, set by OpenAI's servers), and chip power follows it.
+  The runner records characters streamed inside the window and rejects runs where the stream stalled.
 
 ## Method notes (things that bit us)
 

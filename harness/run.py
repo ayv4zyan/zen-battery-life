@@ -17,6 +17,7 @@ from datetime import datetime
 from pathlib import Path
 
 import browsers
+import chatgpt
 import inputctl
 import power
 import preflight
@@ -107,8 +108,9 @@ def _scroll(url: str, flick_px: int = 1000, interval_s: float = 1.6, period: int
     return {"setup": setup, "verify": verify, "during": during}
 
 
-# Mirrors the user's Real session (11 tabs, read from sessionstore by host only). Signed out except
-# where the test profile has a login. Video pages are left out of the background set so nothing plays.
+# Mirrors the author's real session (read from sessionstore by host only). Two personal sites from that
+# session are replaced here by public stand-ins (bbc.com, github.com). Signed out except where the test
+# profile has a login. Video pages are left out of the background set so nothing plays.
 IDLE_TABS = [
     "https://www.youtube.com/",
     "https://www.youtube.com/feed/trending",
@@ -137,6 +139,17 @@ def _idle_tabs():
     return {"setup": setup, "verify": lambda b: {"front": b.js("return location.host")}, "during": None}
 
 
+def _chatgpt_stream():
+    """A ChatGPT reply streaming in, all window long: signed out, one tab, prompts from a fixed list."""
+    def setup(b):
+        st = chatgpt.start(b)
+        b.focus()
+        browsers.mouse_park()
+        return st
+
+    return {"setup": setup, "verify": chatgpt.state, "during": None}
+
+
 def _idle_system():
     return {"setup": None, "verify": None, "during": None, "no_browser": True}
 
@@ -154,6 +167,7 @@ WORKLOADS = {
     "idle-tabs": _idle_tabs(),
     "article-scroll": _scroll("https://en.wikipedia.org/wiki/History_of_the_United_States"),
     "x-scroll": _scroll("https://x.com/home", flick_px=1200, interval_s=2.0, period=0),
+    "chatgpt-stream": _chatgpt_stream(),
 }
 
 
@@ -179,8 +193,10 @@ def run_one(browser_name: str, workload: str, label: str, prefs: dict | None, ex
             b.quiesce(MEASURE_S)
         rec = power.PowerRecorder(MEASURE_S, out_dir)
         rec.start()
+        t0_ms = time.time() * 1000
         driver = wl["during"](b) if wl.get("during") else None
         r = rec.wait()
+        t1_ms = time.time() * 1000
         if driver:
             driver.wait(timeout=30)
         if wl.get("verify"):
@@ -192,6 +208,14 @@ def run_one(browser_name: str, workload: str, label: str, prefs: dict | None, ex
             if vf["scrolls"] < 100 or vf.get("href") != st.get("href"):
                 rec_info["ok"] = False
                 rec_info["error"] = f"page did not scroll: scrolls={vf['scrolls']} href={vf.get('href')}"
+        if "samples" in vf:  # ChatGPT: text must have kept streaming through the window
+            rec_info["chat_samples"] = samples = vf.pop("samples")
+            vf["chars_in_window"] = chatgpt.streamed_in(samples, t0_ms, t1_ms)
+            vf["replies_in_window"] = sum(t0_ms <= t <= t1_ms for t in vf.get("ends", []))
+            errs = [e for e in vf.get("errors", []) if t0_ms <= e[0] <= t1_ms]
+            if errs or vf["chars_in_window"] < MEASURE_S * 100:
+                rec_info["ok"] = False
+                rec_info["error"] = f"reply stream stalled: chars={vf['chars_in_window']} errors={errs}"
         if "state" in vf:  # YouTube: must still be playing, and must have played through the window
             played = (vf.get("t") or 0) - (st.get("t") or 0)
             if vf.get("state") != 1 or played < MEASURE_S * 0.95:
@@ -207,7 +231,7 @@ def run_one(browser_name: str, workload: str, label: str, prefs: dict | None, ex
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "run.json").write_text(json.dumps(rec_info, indent=1, default=str))
     RUNS.parent.mkdir(parents=True, exist_ok=True)
-    slim = {k: v for k, v in rec_info.items() if k != "conditions_after"}
+    slim = {k: v for k, v in rec_info.items() if k not in ("conditions_after", "chat_samples")}
     if "summary" in slim:
         slim["summary"] = {k: v for k, v in slim["summary"].items() if k != "top_processes"}
     with RUNS.open("a") as f:
@@ -220,9 +244,11 @@ def fmt(r: dict) -> str:
         return f"{r['browser']:8} {r['workload']:24} FAILED {r.get('error')}"
     s = r["summary"]
     sysw = f"{s['system_mw'] / 1000:5.2f} W" if s.get("system_mw") else "  n/a  "
+    vf = r.get("verify") or {}
+    chat = f"  chat {vf['chars_in_window'] / MEASURE_S:4.0f} chars/s {vf['replies_in_window']} replies" if "chars_in_window" in vf else ""
     return (f"{r['browser']:8} {r['workload']:24} system {sysw}  chip {s['combined_mw'] / 1000:5.2f} W "
             f"(cpu {s['cpu_mw'] / 1000:4.2f} gpu {s['gpu_mw'] / 1000:4.2f})  "
-            f"browser EI {s.get('browser_energy_impact', 0):6.1f}  WS cpu {s.get('windowserver_cpu_ms_per_s') or 0:5.1f} ms/s")
+            f"browser EI {s.get('browser_energy_impact', 0):6.1f}  WS cpu {s.get('windowserver_cpu_ms_per_s') or 0:5.1f} ms/s{chat}")
 
 
 def main():

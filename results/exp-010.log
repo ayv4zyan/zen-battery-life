@@ -1,0 +1,10 @@
+[1] stock            safari   chatgpt-stream           system 10.67 W  chip  4.42 W (cpu 4.37 gpu 0.06)  browser EI 4258.1  WS cpu 136.3 ms/s  chat  307 chars/s 3 replies
+[1] stock            zen      chatgpt-stream           system 10.07 W  chip  4.46 W (cpu 4.35 gpu 0.10)  browser EI 4260.8  WS cpu  84.7 ms/s  chat  318 chars/s 3 replies
+[1] final+fps60      zen      chatgpt-stream           system  9.10 W  chip  4.39 W (cpu 4.35 gpu 0.04)  browser EI 4280.3  WS cpu  59.5 ms/s  chat  243 chars/s 3 replies
+[2] stock            safari   chatgpt-stream           system  9.73 W  chip  4.35 W (cpu 4.27 gpu 0.08)  browser EI 4164.7  WS cpu 127.6 ms/s  chat  333 chars/s 3 replies
+[2] stock            zen      chatgpt-stream           system  8.85 W  chip  3.94 W (cpu 3.82 gpu 0.13)  browser EI 3710.5  WS cpu 113.9 ms/s  chat  260 chars/s 3 replies
+[2] final+fps60      zen      chatgpt-stream           system 10.14 W  chip  4.67 W (cpu 4.64 gpu 0.03)  browser EI 4387.3  WS cpu  49.6 ms/s  chat  322 chars/s 3 replies
+
+chatgpt-stream           safari   stock            n=2 system 10.20 W  chip 4.39 W (cpu 4.32 gpu 0.07)  WS 132 ms/s
+chatgpt-stream           zen      final+fps60      n=2 system 9.62 W  chip 4.53 W (cpu 4.49 gpu 0.03)  WS 55 ms/s
+chatgpt-stream           zen      stock            n=2 system 9.46 W  chip 4.20 W (cpu 4.09 gpu 0.11)  WS 99 ms/s
