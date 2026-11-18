@@ -123,7 +123,30 @@ Layer dump (`harness/layerdump.py`, pref `gfx.webrender.debug.dump-native-layer-
 - Parity target (≤1.2× Safari, system) met on every Workload; Stretch target (below Safari) on 6 of 8.
 - Remaining gap: X scrolling, chip 1.77× Safari. Per process (CPU ms/s): content 375 vs Safari 359 (same), but Zen GPU process 215 vs WebKit GPU 39,
   and Zen parent 127 vs Safari 54. The compositor side, not page work. Hypothesis: Gecko composites/paints at 120 Hz on ProMotion while Safari
-  renders page updates near 60 fps by default. Next: exp 009 (`gfx.display.max-frame-rate=60`).
+  renders page updates near 60 fps by default. Confirmed and fixed in section 8.
+
+## 8. ProMotion: cap web content at 60 fps like Safari (FIXED by a pref)
+
+`gfx.display.max-frame-rate=60` keeps hardware vsync but makes Gecko's VsyncDispatcher use every 2nd tick on the 120 Hz panel.
+Safari already renders page content near 60 fps by default (WebKit "Prefer Page Rendering Updates near 60fps").
+
+| exp 009 (n=2, on battery, 89→79%) | Safari | Zen final | Zen final + 60 fps | +60 fps ×Safari |
+|---|---|---|---|---|
+| X scrolling, system | 5.99 W | 6.79 W | **5.37 W** | **0.90** |
+| ↳ chip | 1.69 W | 2.23 W | **1.47 W** | |
+| ↳ scroll events per run | 3,380 | 5,840 | 3,400 | |
+| Article scrolling, system | 5.02 W | 4.95 W | **4.12 W** | **0.82** |
+| ↳ chip | 0.21 W | 0.50 W | 0.37 W | |
+| YouTube 1080p60 windowed, system | 6.25 W | 4.92 W | 4.84 W | 0.77 |
+| YouTube 1080p60 fullscreen, system | 5.76 W | 4.53 W | 4.16 W | 0.72 |
+
+- Scroll events fire once per rendered frame. Over the same scroll distance Safari and capped Zen fire the same number;
+  stock Zen fires ~1.7× more. That is the direct evidence that Safari renders at ~60 fps here, and that this pref matches it.
+- X scrolling goes from the last Workload above Safari to 0.90×. With this, Zen final is below Safari on every Workload
+  measured except 4K60 fullscreen (1.04× in exp 008).
+- 60 fps video is unaffected (one stray 0.52 W windowed run in the "final" column, otherwise 0.29–0.30 W chip in both).
+- Cost: scrolling and animations in Zen look like a 60 Hz display, as they do in Safari. 120 fps content (rare) would drop frames.
+- `layout.frame_rate=60` (exp 001) did nothing for video; it swaps in a software timer. `gfx.display.max-frame-rate` is the one that works.
 
 ## Method notes (things that bit us)
 
