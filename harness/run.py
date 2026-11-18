@@ -152,16 +152,17 @@ WORKLOADS = {
 
 # ---------------- Runner ----------------
 
-def run_one(browser_name: str, workload: str, label: str, prefs: dict | None, extensions: tuple[str, ...]) -> dict:
+def run_one(browser_name: str, workload: str, label: str, prefs: dict | None, extensions: tuple[str, ...],
+            profile: str | None = None) -> dict:
     wl = WORKLOADS[workload]
     stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
     out_dir = RAW / f"{stamp}_{browser_name}_{workload}_{label}"
     b = None
     rec_info: dict = {"browser": browser_name, "workload": workload, "label": label, "stamp": stamp,
-                      "prefs": prefs or {}, "extensions": list(extensions)}
+                      "prefs": prefs or {}, "extensions": list(extensions), "profile": profile}
     try:
         if not wl.get("no_browser"):
-            b = browsers.make(browser_name)
+            b = browsers.make(browser_name, profile)
             if hasattr(b, "ensure_profile"):
                 b.ensure_profile(prefs_overlay=prefs, extensions=extensions)
             b.launch()

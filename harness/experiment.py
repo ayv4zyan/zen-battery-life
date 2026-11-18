@@ -29,19 +29,23 @@ def main(path: str):
         sys.exit(1)
     # Warm-up: one launch per Gecko browser so background first-launch work (plugin checks,
     # extension rule compilation) happens outside the measurements.
-    for name in sorted({v["browser"] for v in exp["variants"]} - {"safari"}):
-        b = run.browsers.make(name)
-        b.ensure_profile(extensions=tuple(exp.get("extensions", ["uBOLiteRedux@raymondhill.net"])))
+    # One per (browser, profile, extension set); new extensions get their first-install work done here.
+    exts = tuple(exp.get("extensions", ["uBOLiteRedux@raymondhill.net"]))
+    combos = sorted({(v["browser"], v.get("profile") or "", tuple(v.get("extensions", exts)))
+                     for v in exp["variants"] if v["browser"] != "safari"})
+    for name, profile, vexts in combos:
+        b = run.browsers.make(name, profile or None)
+        b.ensure_profile(extensions=vexts)
         b.launch()
         b.navigate("https://www.youtube.com/")
-        time.sleep(45)
+        time.sleep(exp.get("warmup", 45))
         b.quit()
     start = time.strftime("%Y%m%d-%H%M%S")
-    exts = tuple(exp.get("extensions", ["uBOLiteRedux@raymondhill.net"]))
     for i in range(exp.get("repeat", 2)):
         for wl in exp["workloads"]:
             for v in exp["variants"]:
-                r = run.run_one(v["browser"], wl, v["label"], v.get("prefs"), tuple(v.get("extensions", exts)))
+                r = run.run_one(v["browser"], wl, v["label"], v.get("prefs"), tuple(v.get("extensions", exts)),
+                                v.get("profile"))
                 print(f"[{i + 1}] {v['label']:16} {run.fmt(r)}", flush=True)
                 time.sleep(run.COOLDOWN_S)
     print()

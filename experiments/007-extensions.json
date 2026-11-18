@@ -1,0 +1,54 @@
+{
+ "name": "Extension costs in Zen (final config): uBO vs uBOL, Dark Reader",
+ "allow_plugged": true,
+ "repeat": 2,
+ "measure": 90,
+ "warmup": 90,
+ "workloads": [
+  "yt-1080p60-windowed",
+  "article-scroll",
+  "x-scroll",
+  "idle-tabs"
+ ],
+ "variants": [
+  {
+   "label": "final+uBOL",
+   "browser": "zen",
+   "prefs": {
+    "zen.widget.macos.window-vibrancy": false,
+    "_userChrome": "/* Make Firefox Great Again: Zen power fixes that need CSS (no pref exists).\n   Requires toolkit.legacyUserProfileCustomizations.stylesheets = true (set in user.js). */\n\n/* The sidebar media card plays an animated music-note sprite (30 steps/s, forever) while any tab\n   has audio, even when compact mode hides the sidebar. YouTube audio in a background tab:\n   chip 0.21 W -> 0.07 W, WindowServer 264 -> 12 ms/s (experiment 005). The media card and its\n   buttons stay; only the dancing notes go. */\n.zen-media-notes { display: none !important; }\n",
+    "_userContent": "/* Make Firefox Great Again: page styles. Requires toolkit.legacyUserProfileCustomizations.stylesheets = true.\n\n   YouTube \"Ambient mode\" (dark theme) cross-fades two blurred full-screen copies of the video behind the\n   player. Safari composites that cheaply; Gecko repaints every tile under the video each frame and so\n   never reaches macOS's low-power (\"detached\") video mode. Hiding it (exp 006, chip power):\n     1080p24 fullscreen 0.32 -> 0.11 W (Safari 0.19), GPU -> 0\n     1080p60 fullscreen 0.36 -> 0.14 W (Safari 0.29)\n     1080p60 windowed   0.53 -> 0.26 W (Safari 0.59)\n   Visible cost: no coloured glow around the player / in the letterbox bars.\n   Equivalent without CSS: YouTube player Settings (gear) -> Ambient mode -> off, in each browser. */\n@-moz-document domain(youtube.com) {\n  #cinematics-container, #cinematics { display: none !important; }\n}\n"
+   },
+   "extensions": [
+    "uBOLiteRedux@raymondhill.net"
+   ]
+  },
+  {
+   "label": "final+uBO",
+   "browser": "zen",
+   "profile": "zen-ubo",
+   "prefs": {
+    "zen.widget.macos.window-vibrancy": false,
+    "_userChrome": "/* Make Firefox Great Again: Zen power fixes that need CSS (no pref exists).\n   Requires toolkit.legacyUserProfileCustomizations.stylesheets = true (set in user.js). */\n\n/* The sidebar media card plays an animated music-note sprite (30 steps/s, forever) while any tab\n   has audio, even when compact mode hides the sidebar. YouTube audio in a background tab:\n   chip 0.21 W -> 0.07 W, WindowServer 264 -> 12 ms/s (experiment 005). The media card and its\n   buttons stay; only the dancing notes go. */\n.zen-media-notes { display: none !important; }\n",
+    "_userContent": "/* Make Firefox Great Again: page styles. Requires toolkit.legacyUserProfileCustomizations.stylesheets = true.\n\n   YouTube \"Ambient mode\" (dark theme) cross-fades two blurred full-screen copies of the video behind the\n   player. Safari composites that cheaply; Gecko repaints every tile under the video each frame and so\n   never reaches macOS's low-power (\"detached\") video mode. Hiding it (exp 006, chip power):\n     1080p24 fullscreen 0.32 -> 0.11 W (Safari 0.19), GPU -> 0\n     1080p60 fullscreen 0.36 -> 0.14 W (Safari 0.29)\n     1080p60 windowed   0.53 -> 0.26 W (Safari 0.59)\n   Visible cost: no coloured glow around the player / in the letterbox bars.\n   Equivalent without CSS: YouTube player Settings (gear) -> Ambient mode -> off, in each browser. */\n@-moz-document domain(youtube.com) {\n  #cinematics-container, #cinematics { display: none !important; }\n}\n"
+   },
+   "extensions": [
+    "uBlock0@raymondhill.net"
+   ]
+  },
+  {
+   "label": "final+uBOL+DR",
+   "browser": "zen",
+   "profile": "zen-darkreader",
+   "prefs": {
+    "zen.widget.macos.window-vibrancy": false,
+    "_userChrome": "/* Make Firefox Great Again: Zen power fixes that need CSS (no pref exists).\n   Requires toolkit.legacyUserProfileCustomizations.stylesheets = true (set in user.js). */\n\n/* The sidebar media card plays an animated music-note sprite (30 steps/s, forever) while any tab\n   has audio, even when compact mode hides the sidebar. YouTube audio in a background tab:\n   chip 0.21 W -> 0.07 W, WindowServer 264 -> 12 ms/s (experiment 005). The media card and its\n   buttons stay; only the dancing notes go. */\n.zen-media-notes { display: none !important; }\n",
+    "_userContent": "/* Make Firefox Great Again: page styles. Requires toolkit.legacyUserProfileCustomizations.stylesheets = true.\n\n   YouTube \"Ambient mode\" (dark theme) cross-fades two blurred full-screen copies of the video behind the\n   player. Safari composites that cheaply; Gecko repaints every tile under the video each frame and so\n   never reaches macOS's low-power (\"detached\") video mode. Hiding it (exp 006, chip power):\n     1080p24 fullscreen 0.32 -> 0.11 W (Safari 0.19), GPU -> 0\n     1080p60 fullscreen 0.36 -> 0.14 W (Safari 0.29)\n     1080p60 windowed   0.53 -> 0.26 W (Safari 0.59)\n   Visible cost: no coloured glow around the player / in the letterbox bars.\n   Equivalent without CSS: YouTube player Settings (gear) -> Ambient mode -> off, in each browser. */\n@-moz-document domain(youtube.com) {\n  #cinematics-container, #cinematics { display: none !important; }\n}\n"
+   },
+   "extensions": [
+    "uBOLiteRedux@raymondhill.net",
+    "addon@darkreader.org"
+   ]
+  }
+ ]
+}

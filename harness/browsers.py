@@ -246,7 +246,20 @@ end tell''')
             time.sleep(0.5)
 
 
-def make(name: str):
+def make(name: str, profile: str | None = None):
+    """`profile`: a named Clean profile (e.g. "zen-ubo") for an extension set of its own, so
+    variants never install/uninstall extensions between runs. Created as a copy of
+    "<name>-clean" (keeping its site logins) the first time it is used."""
+    b = _make(name)
+    if profile and name != "safari":
+        b.profile = PROFILES / profile
+        if not b.profile.exists():
+            shutil.copytree(PROFILES / f"{name}-clean", b.profile,
+                            ignore=shutil.ignore_patterns("lock", ".parentlock", "parent.lock"))
+    return b
+
+
+def _make(name: str):
     if name == "safari":
         return Safari()
     if name == "firefox":
