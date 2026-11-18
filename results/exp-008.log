@@ -1,0 +1,74 @@
+[1] stock            safari   yt-1080p24-fullscreen    system  5.50 W  chip  0.21 W (cpu 0.10 gpu 0.10)  browser EI   27.1  WS cpu 100.5 ms/s
+[1] stock            zen      yt-1080p24-fullscreen    system  5.50 W  chip  0.34 W (cpu 0.17 gpu 0.17)  browser EI   52.5  WS cpu 187.0 ms/s
+[1] final            zen      yt-1080p24-fullscreen    system  3.84 W  chip  0.14 W (cpu 0.14 gpu 0.00)  browser EI   34.1  WS cpu  96.7 ms/s
+[1] stock            safari   yt-1080p60-fullscreen    system  5.67 W  chip  0.31 W (cpu 0.20 gpu 0.11)  browser EI   31.3  WS cpu 140.6 ms/s
+[1] stock            zen      yt-1080p60-fullscreen    system  5.79 W  chip  0.38 W (cpu 0.20 gpu 0.18)  browser EI   63.3  WS cpu 213.0 ms/s
+[1] final            zen      yt-1080p60-fullscreen    system  4.76 W  chip  0.16 W (cpu 0.16 gpu 0.00)  browser EI   45.3  WS cpu 145.8 ms/s
+[1] stock            safari   yt-1080p60-windowed      system  5.69 W  chip  0.59 W (cpu 0.27 gpu 0.32)  browser EI   51.8  WS cpu 133.6 ms/s
+[1] stock            zen      yt-1080p60-windowed      system  7.26 W  chip  1.36 W (cpu 0.74 gpu 0.62)  browser EI   86.2  WS cpu 122.2 ms/s
+[1] final            zen      yt-1080p60-windowed      system  4.82 W  chip  0.28 W (cpu 0.18 gpu 0.10)  browser EI   49.9  WS cpu 275.8 ms/s
+[1] stock            safari   yt-4k60-fullscreen       system  5.23 W  chip  0.35 W (cpu 0.24 gpu 0.11)  browser EI   34.0  WS cpu 168.1 ms/s
+[1] stock            zen      yt-4k60-fullscreen       system  5.87 W  chip  0.45 W (cpu 0.26 gpu 0.19)  browser EI   91.1  WS cpu 207.8 ms/s
+[1] final            zen      yt-4k60-fullscreen       system  5.03 W  chip  0.22 W (cpu 0.21 gpu 0.01)  browser EI   74.1  WS cpu 149.6 ms/s
+[1] stock            safari   yt-background-audio      system  4.43 W  chip  0.10 W (cpu 0.10 gpu 0.01)  browser EI   20.6  WS cpu  17.1 ms/s
+[1] stock            zen      yt-background-audio      system  4.92 W  chip  0.31 W (cpu 0.19 gpu 0.12)  browser EI   48.0  WS cpu 317.7 ms/s
+[1] final            zen      yt-background-audio      system  4.08 W  chip  0.09 W (cpu 0.09 gpu 0.00)  browser EI   22.3  WS cpu  15.7 ms/s
+[1] stock            safari   x-scroll                 system  6.37 W  chip  1.27 W (cpu 1.07 gpu 0.20)  browser EI  877.9  WS cpu 268.3 ms/s
+[1] stock            zen      x-scroll                 system  8.56 W  chip  3.65 W (cpu 2.80 gpu 0.85)  browser EI 1858.7  WS cpu 238.2 ms/s
+[1] final            zen      x-scroll                 system  7.42 W  chip  2.57 W (cpu 2.20 gpu 0.37)  browser EI 1798.8  WS cpu 275.7 ms/s
+[1] stock            safari   article-scroll           system  5.83 W  chip  0.26 W (cpu 0.14 gpu 0.12)  browser EI   19.0  WS cpu 301.0 ms/s
+[1] stock            zen      article-scroll           system  6.85 W  chip  1.19 W (cpu 0.40 gpu 0.79)  browser EI   98.0  WS cpu 249.9 ms/s
+[1] final            zen      article-scroll           system  5.88 W  chip  0.77 W (cpu 0.38 gpu 0.39)  browser EI   96.6  WS cpu 283.5 ms/s
+[1] stock            safari   idle-tabs                system  2.73 W  chip  0.08 W (cpu 0.08 gpu 0.00)  browser EI    9.4  WS cpu 125.4 ms/s
+[1] stock            zen      idle-tabs                system  2.62 W  chip  0.15 W (cpu 0.15 gpu 0.00)  browser EI   14.5  WS cpu   8.9 ms/s
+[1] final            zen      idle-tabs                system  2.32 W  chip  0.06 W (cpu 0.06 gpu 0.00)  browser EI   25.6  WS cpu   8.7 ms/s
+[2] stock            safari   yt-1080p24-fullscreen    system  4.90 W  chip  0.27 W (cpu 0.11 gpu 0.16)  browser EI   30.5  WS cpu 141.1 ms/s
+[2] stock            zen      yt-1080p24-fullscreen    system  5.10 W  chip  0.37 W (cpu 0.16 gpu 0.21)  browser EI   49.7  WS cpu 250.5 ms/s
+[2] final            zen      yt-1080p24-fullscreen    system  3.26 W  chip  0.16 W (cpu 0.15 gpu 0.01)  browser EI   36.2  WS cpu 152.7 ms/s
+[2] stock            safari   yt-1080p60-fullscreen    FAILED RuntimeError("video not playing: {'ready': True, 'state': 3, 'quality': 'hd1080', 't': 1, 'paused': False, 'muted': False, 'volume': 1, 'w': 1920, 'h': 1080, 'rect': [1512, 945], 'total_frames': 59, 'dropped_frames': 0, 'codecs': 'av01.0.09M.08 (399) / opus (251)', 'dims_and_frames': '1512x945*2.00 / 0 dropped of 59', 'resolution': '1920x1080@60 / 1920x1080@60', 'fullscreen': True, 'ad': False}")
+[2] stock            safari   yt-1080p60-fullscreen    system  4.73 W  chip  0.38 W (cpu 0.24 gpu 0.14)  browser EI   31.6  WS cpu 132.1 ms/s
+[2] stock            zen      yt-1080p60-fullscreen    system  5.22 W  chip  0.42 W (cpu 0.20 gpu 0.22)  browser EI   63.0  WS cpu 325.8 ms/s
+[2] final            zen      yt-1080p60-fullscreen    system  4.63 W  chip  0.24 W (cpu 0.21 gpu 0.03)  browser EI   64.4  WS cpu 255.6 ms/s
+[2] stock            safari   yt-1080p60-windowed      system  6.15 W  chip  0.67 W (cpu 0.29 gpu 0.38)  browser EI   48.6  WS cpu 181.8 ms/s
+[2] stock            zen      yt-1080p60-windowed      system  6.99 W  chip  1.44 W (cpu 0.79 gpu 0.64)  browser EI   92.1  WS cpu 127.7 ms/s
+[2] final            zen      yt-1080p60-windowed      system  4.48 W  chip  0.30 W (cpu 0.18 gpu 0.12)  browser EI   54.3  WS cpu 284.1 ms/s
+[2] stock            safari   yt-4k60-fullscreen       system  4.86 W  chip  0.39 W (cpu 0.25 gpu 0.14)  browser EI   37.4  WS cpu 139.0 ms/s
+[2] stock            zen      yt-4k60-fullscreen       system  6.09 W  chip  0.47 W (cpu 0.25 gpu 0.22)  browser EI   89.9  WS cpu 348.0 ms/s
+[2] final            zen      yt-4k60-fullscreen       system  5.46 W  chip  0.44 W (cpu 0.42 gpu 0.03)  browser EI   76.1  WS cpu 287.3 ms/s
+[2] stock            safari   yt-background-audio      system  3.68 W  chip  0.07 W (cpu 0.07 gpu 0.00)  browser EI   13.1  WS cpu   8.4 ms/s
+[2] stock            zen      yt-background-audio      system  4.33 W  chip  0.31 W (cpu 0.18 gpu 0.13)  browser EI   51.9  WS cpu 312.7 ms/s
+[2] final            zen      yt-background-audio      system  3.03 W  chip  0.08 W (cpu 0.08 gpu 0.00)  browser EI   23.5  WS cpu  15.7 ms/s
+[2] stock            safari   x-scroll                 system  6.08 W  chip  1.53 W (cpu 1.29 gpu 0.24)  browser EI 1047.2  WS cpu 285.7 ms/s
+[2] stock            zen      x-scroll                 system 10.07 W  chip  4.15 W (cpu 2.63 gpu 1.52)  browser EI 1880.4  WS cpu 247.7 ms/s
+[2] final            zen      x-scroll                 system  7.26 W  chip  2.38 W (cpu 2.07 gpu 0.32)  browser EI 1748.2  WS cpu 270.2 ms/s
+[2] stock            safari   article-scroll           system  5.68 W  chip  0.22 W (cpu 0.11 gpu 0.11)  browser EI   18.1  WS cpu 290.9 ms/s
+[2] stock            zen      article-scroll           system  6.46 W  chip  1.17 W (cpu 0.39 gpu 0.79)  browser EI   95.0  WS cpu 250.5 ms/s
+[2] final            zen      article-scroll           system  5.11 W  chip  0.49 W (cpu 0.21 gpu 0.27)  browser EI   66.0  WS cpu 264.9 ms/s
+[2] stock            safari   idle-tabs                system  2.62 W  chip  0.09 W (cpu 0.09 gpu 0.00)  browser EI   14.9  WS cpu 114.5 ms/s
+[2] stock            zen      idle-tabs                system  2.34 W  chip  0.08 W (cpu 0.08 gpu 0.00)  browser EI   18.3  WS cpu   8.6 ms/s
+[2] final            zen      idle-tabs                system  2.59 W  chip  0.07 W (cpu 0.07 gpu 0.00)  browser EI   15.0  WS cpu   9.5 ms/s
+
+article-scroll           safari   stock            n=2 system 5.76 W  chip 0.24 W (cpu 0.13 gpu 0.11)  WS 296 ms/s
+article-scroll           zen      final            n=2 system 5.49 W  chip 0.63 W (cpu 0.30 gpu 0.33)  WS 274 ms/s
+article-scroll           zen      stock            n=2 system 6.65 W  chip 1.18 W (cpu 0.40 gpu 0.79)  WS 250 ms/s
+idle-tabs                safari   stock            n=2 system 2.68 W  chip 0.09 W (cpu 0.08 gpu 0.00)  WS 120 ms/s
+idle-tabs                zen      final            n=2 system 2.45 W  chip 0.06 W (cpu 0.06 gpu 0.00)  WS 9 ms/s
+idle-tabs                zen      stock            n=2 system 2.48 W  chip 0.12 W (cpu 0.12 gpu 0.00)  WS 9 ms/s
+x-scroll                 safari   stock            n=2 system 6.23 W  chip 1.40 W (cpu 1.18 gpu 0.22)  WS 277 ms/s
+x-scroll                 zen      final            n=2 system 7.34 W  chip 2.48 W (cpu 2.13 gpu 0.34)  WS 273 ms/s
+x-scroll                 zen      stock            n=2 system 9.31 W  chip 3.90 W (cpu 2.71 gpu 1.19)  WS 243 ms/s
+yt-1080p24-fullscreen    safari   stock            n=2 system 5.20 W  chip 0.24 W (cpu 0.11 gpu 0.13)  WS 121 ms/s
+yt-1080p24-fullscreen    zen      final            n=2 system 3.55 W  chip 0.15 W (cpu 0.14 gpu 0.01)  WS 125 ms/s
+yt-1080p24-fullscreen    zen      stock            n=2 system 5.30 W  chip 0.36 W (cpu 0.16 gpu 0.19)  WS 219 ms/s
+yt-1080p60-fullscreen    safari   stock            n=2 system 5.20 W  chip 0.34 W (cpu 0.22 gpu 0.12)  WS 136 ms/s
+yt-1080p60-fullscreen    zen      final            n=2 system 4.69 W  chip 0.20 W (cpu 0.19 gpu 0.01)  WS 201 ms/s
+yt-1080p60-fullscreen    zen      stock            n=2 system 5.51 W  chip 0.40 W (cpu 0.20 gpu 0.20)  WS 269 ms/s
+yt-1080p60-windowed      safari   stock            n=2 system 5.92 W  chip 0.63 W (cpu 0.28 gpu 0.35)  WS 158 ms/s
+yt-1080p60-windowed      zen      final            n=2 system 4.65 W  chip 0.29 W (cpu 0.18 gpu 0.11)  WS 280 ms/s
+yt-1080p60-windowed      zen      stock            n=2 system 7.12 W  chip 1.40 W (cpu 0.77 gpu 0.63)  WS 125 ms/s
+yt-4k60-fullscreen       safari   stock            n=2 system 5.04 W  chip 0.37 W (cpu 0.24 gpu 0.12)  WS 154 ms/s
+yt-4k60-fullscreen       zen      final            n=2 system 5.25 W  chip 0.33 W (cpu 0.31 gpu 0.02)  WS 218 ms/s
+yt-4k60-fullscreen       zen      stock            n=2 system 5.98 W  chip 0.46 W (cpu 0.26 gpu 0.21)  WS 278 ms/s
+yt-background-audio      safari   stock            n=2 system 4.06 W  chip 0.09 W (cpu 0.08 gpu 0.00)  WS 13 ms/s
+yt-background-audio      zen      final            n=2 system 3.55 W  chip 0.09 W (cpu 0.09 gpu 0.00)  WS 16 ms/s
+yt-background-audio      zen      stock            n=2 system 4.63 W  chip 0.31 W (cpu 0.19 gpu 0.12)  WS 315 ms/s
