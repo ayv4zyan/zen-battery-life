@@ -1,0 +1,13 @@
+/* Make Firefox Great Again: page styles. Requires toolkit.legacyUserProfileCustomizations.stylesheets = true.
+
+   YouTube "Ambient mode" (dark theme) cross-fades two blurred full-screen copies of the video behind the
+   player. Safari composites that cheaply; Gecko repaints every tile under the video each frame and so
+   never reaches macOS's low-power ("detached") video mode. Hiding it (exp 006, chip power):
+     1080p24 fullscreen 0.32 -> 0.11 W (Safari 0.19), GPU -> 0
+     1080p60 fullscreen 0.36 -> 0.14 W (Safari 0.29)
+     1080p60 windowed   0.53 -> 0.26 W (Safari 0.59)
+   Visible cost: no coloured glow around the player / in the letterbox bars.
+   Equivalent without CSS: YouTube player Settings (gear) -> Ambient mode -> off, in each browser. */
+@-moz-document domain(youtube.com) {
+  #cinematics-container, #cinematics { display: none !important; }
+}

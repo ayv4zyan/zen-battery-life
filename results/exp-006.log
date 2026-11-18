@@ -1,0 +1,25 @@
+[1] stock            safari   yt-1080p24-fullscreen    system  4.08 W  chip  0.19 W (cpu 0.09 gpu 0.10)  browser EI   25.2  WS cpu  92.4 ms/s
+[1] vib-off          zen      yt-1080p24-fullscreen    system  4.75 W  chip  0.32 W (cpu 0.14 gpu 0.18)  browser EI   46.8  WS cpu 173.8 ms/s
+[1] vib-off+no-ambient zen      yt-1080p24-fullscreen    system  2.90 W  chip  0.11 W (cpu 0.11 gpu 0.00)  browser EI   30.2  WS cpu  90.2 ms/s
+[1] vib-off+black-fs zen      yt-1080p24-fullscreen    system  3.19 W  chip  0.11 W (cpu 0.10 gpu 0.00)  browser EI   30.4  WS cpu  88.0 ms/s
+[1] stock            safari   yt-1080p60-fullscreen    system  4.81 W  chip  0.29 W (cpu 0.18 gpu 0.11)  browser EI   33.3  WS cpu 139.4 ms/s
+[1] vib-off          zen      yt-1080p60-fullscreen    system  5.34 W  chip  0.36 W (cpu 0.17 gpu 0.18)  browser EI   61.5  WS cpu 202.5 ms/s
+[1] vib-off+no-ambient zen      yt-1080p60-fullscreen    system  3.97 W  chip  0.14 W (cpu 0.14 gpu 0.00)  browser EI   47.1  WS cpu 130.7 ms/s
+[1] vib-off+black-fs zen      yt-1080p60-fullscreen    system  4.50 W  chip  0.14 W (cpu 0.14 gpu 0.00)  browser EI   48.0  WS cpu 131.8 ms/s
+[1] stock            safari   yt-1080p60-windowed      system  6.30 W  chip  0.59 W (cpu 0.26 gpu 0.33)  browser EI   49.0  WS cpu 106.4 ms/s
+[1] vib-off          zen      yt-1080p60-windowed      system  5.16 W  chip  0.53 W (cpu 0.23 gpu 0.30)  browser EI   72.3  WS cpu 268.1 ms/s
+[1] vib-off+no-ambient zen      yt-1080p60-windowed      system  4.74 W  chip  0.26 W (cpu 0.16 gpu 0.10)  browser EI   50.8  WS cpu 259.9 ms/s
+[1] vib-off+black-fs zen      yt-1080p60-windowed      system  4.20 W  chip  0.25 W (cpu 0.15 gpu 0.10)  browser EI   47.0  WS cpu 261.6 ms/s
+
+yt-1080p24-fullscreen    safari   stock            n=1 system 4.08 W  chip 0.19 W (cpu 0.09 gpu 0.10)  WS 92 ms/s
+yt-1080p24-fullscreen    zen      vib-off          n=1 system 4.75 W  chip 0.32 W (cpu 0.14 gpu 0.18)  WS 174 ms/s
+yt-1080p24-fullscreen    zen      vib-off+black-fs n=1 system 3.19 W  chip 0.11 W (cpu 0.10 gpu 0.00)  WS 88 ms/s
+yt-1080p24-fullscreen    zen      vib-off+no-ambient n=1 system 2.90 W  chip 0.11 W (cpu 0.11 gpu 0.00)  WS 90 ms/s
+yt-1080p60-fullscreen    safari   stock            n=1 system 4.81 W  chip 0.29 W (cpu 0.18 gpu 0.11)  WS 139 ms/s
+yt-1080p60-fullscreen    zen      vib-off          n=1 system 5.34 W  chip 0.36 W (cpu 0.17 gpu 0.18)  WS 203 ms/s
+yt-1080p60-fullscreen    zen      vib-off+black-fs n=1 system 4.50 W  chip 0.14 W (cpu 0.14 gpu 0.00)  WS 132 ms/s
+yt-1080p60-fullscreen    zen      vib-off+no-ambient n=1 system 3.97 W  chip 0.14 W (cpu 0.14 gpu 0.00)  WS 131 ms/s
+yt-1080p60-windowed      safari   stock            n=1 system 6.30 W  chip 0.59 W (cpu 0.26 gpu 0.33)  WS 106 ms/s
+yt-1080p60-windowed      zen      vib-off          n=1 system 5.16 W  chip 0.53 W (cpu 0.23 gpu 0.30)  WS 268 ms/s
+yt-1080p60-windowed      zen      vib-off+black-fs n=1 system 4.20 W  chip 0.25 W (cpu 0.15 gpu 0.10)  WS 262 ms/s
+yt-1080p60-windowed      zen      vib-off+no-ambient n=1 system 4.74 W  chip 0.26 W (cpu 0.16 gpu 0.10)  WS 260 ms/s

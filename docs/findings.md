@@ -36,7 +36,7 @@ Possible better fix (source): mask the effect view to the non-content regions so
 - Chip ×1.65 vs Safari, but only ~+0.1 W on the system → ~1.03× system.
 - Revealing the fullscreen menu bar once (the workaround from [Bug 1941693](https://bugzilla.mozilla.org/show_bug.cgi?id=1941693)) changes nothing on this machine.
 - `layout.frame_rate=60` changes nothing (exp 001).
-- Next: dump the native layer tree (`gfx.webrender.debug.dump-native-layer-tree-to-file`) to see which `CheckVideoLowPower` condition fails.
+- Cause found: YouTube Ambient mode, see section 5.
 
 ## 3. Breadth: background audio, idle tabs, article scroll (exp 004, n=2)
 
@@ -68,6 +68,29 @@ Possible better fix (source): mask the effect view to the non-content regions so
 - Hiding only `.zen-media-notes` removes the whole cost while keeping the media card. Disabling media controls entirely is no better.
 - System power is noisy at ~3 W (battery accumulator); chip and WindowServer are unambiguous.
 - Upstream idea for Zen: stop the sprite animation when the sidebar is collapsed/hidden (compact mode), or honour it only on hover.
+
+## 5. YouTube Ambient mode blocks Gecko's low-power fullscreen video (FIXED by userContent.css)
+
+Layer dump (`harness/layerdump.py`, pref `gfx.webrender.debug.dump-native-layer-tree-to-file`) in fullscreen 1080p24, Zen:
+- Stock: 12 painted 512×256 tiles covering the screen, then the video on top. The tiles hold a blurred grey copy of the video plus the channel watermark.
+  `CheckVideoLowPower` fails at `FailBacking` (the layer under the video is not opaque black), so WindowServer composites every frame.
+- DOM (same in Safari and Zen): `#cinematics` holds two 3024×1288 canvases cross-fading (opacity ≈0.15 animating), and the player has `ytp-transparent`.
+  This is YouTube's Ambient mode, active in fullscreen too. Safari composites it as CA layers; WebRender re-rasterises the tiles under the video.
+- With `#cinematics { display:none }`: layer tree becomes exactly [full-screen black color layer, video].
+
+| exp 006 (n=1, on battery) | Safari | Zen vib-off | Zen vib-off, Ambient hidden |
+|---|---|---|---|
+| 1080p24 fullscreen, chip / GPU | 0.19 / 0.10 W | 0.32 / 0.18 W | **0.11 / 0.00 W** |
+| ↳ system | 4.08 W | 4.75 W | 2.90 W |
+| 1080p60 fullscreen, chip | 0.29 W | 0.36 W | **0.14 W** |
+| ↳ system | 4.81 W | 5.34 W | 3.97 W |
+| 1080p60 windowed, chip | 0.59 W | 0.53 W | **0.26 W** |
+| ↳ system | 6.30 W | 5.16 W | 4.74 W |
+
+- Forcing a pure black fullscreen background and hiding the watermark on top of this gave the same chip numbers; hiding Ambient mode is enough.
+- This beats Safari (Stretch target) because Safari itself pays for Ambient mode. Turning Ambient mode off in Safari's YouTube settings would likely help Safari too.
+- Upstream (Gecko): an opacity cross-fade of a canvas under a fullscreen video forces full-screen tile re-rasterisation; WebKit avoids that.
+- Needs confirmation at n≥2 on a charged battery.
 
 ## Method notes (things that bit us)
 
