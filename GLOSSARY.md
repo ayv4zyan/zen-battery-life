@@ -1,4 +1,4 @@
-# Make Firefox Great Again
+# zen-battery-life: glossary
 
 Making Zen (a Firefox-based browser) use about as little power on an M4 MacBook Pro as Safari does, for the user's real daily tasks.
 

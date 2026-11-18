@@ -1,4 +1,4 @@
-/* Make Firefox Great Again: Zen power fixes that need CSS (no pref exists).
+/* zen-battery-life: Zen power fixes that need CSS (no pref exists).
    Requires toolkit.legacyUserProfileCustomizations.stylesheets = true (set in user.js). */
 
 /* The sidebar media card plays an animated music-note sprite (30 steps/s, forever) while any tab

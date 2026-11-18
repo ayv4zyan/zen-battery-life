@@ -180,5 +180,5 @@ Workload `chatgpt-stream`: signed-out chatgpt.com, one tab. An in-page loop send
 - `user.js` only sets keys; prefs a variant set stay in `prefs.js` for later runs. The harness now strips tunable prefs from `prefs.js` before each launch.
 - The XDR panel's local dimming makes system power depend on picture content; chip power is the steadier signal, system power is what the battery sees.
 - Synthetic trackpad scrolls must start like a real trackpad (MayBegin, then Began carrying movement). A zero-delta Began makes Gecko drop
-  the whole gesture on pages whose root has `overscroll-behavior: none` (X), so every X-scroll run before e4caed5 measured an unscrolled page.
+  the whole gesture on pages whose root has `overscroll-behavior: none` (X), so every X-scroll run before f1fd8b8 measured an unscrolled page.
   Scroll Workloads now count page scroll events and reject runs that did not scroll.

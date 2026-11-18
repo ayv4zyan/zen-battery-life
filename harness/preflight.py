@@ -42,7 +42,7 @@ def check(require_battery: bool = True) -> tuple[bool, list[str], dict]:
     if not c["sudo_powermetrics"]:
         problems.append("powermetrics needs passwordless sudo (SETUP.md step 1)")
     if not c["accessibility"]:
-        problems.append("Accessibility permission for Claude is off (SETUP.md step 3)")
+        problems.append("Accessibility permission for MFGA Input is off (SETUP.md step 3)")
     if require_battery and not c["on_battery"]:
         problems.append("plugged in: unplug the charger")
     if require_battery and c["charge_pct"] is not None and c["charge_pct"] < 40:

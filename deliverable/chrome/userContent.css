@@ -1,4 +1,4 @@
-/* Make Firefox Great Again: page styles. Requires toolkit.legacyUserProfileCustomizations.stylesheets = true.
+/* zen-battery-life: page styles. Requires toolkit.legacyUserProfileCustomizations.stylesheets = true.
 
    YouTube "Ambient mode" (dark theme) cross-fades two blurred full-screen copies of the video behind the
    player. Safari composites that cheaply; Gecko repaints every tile under the video each frame and so
