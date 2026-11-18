@@ -1,0 +1,17 @@
+{
+  "name": "Zen background audio: is the media-card notes animation the cost?",
+  "allow_plugged": true,
+  "repeat": 2,
+  "measure": 90,
+  "workloads": ["yt-background-audio"],
+  "variants": [
+    {"label": "vib-off", "browser": "zen", "prefs": {"zen.widget.macos.window-vibrancy": false}},
+    {"label": "vib-off+no-notes", "browser": "zen", "prefs": {"zen.widget.macos.window-vibrancy": false,
+      "_userChrome": ".zen-media-notes { display: none !important; }"}},
+    {"label": "vib-off+no-mediactl", "browser": "zen", "prefs": {"zen.widget.macos.window-vibrancy": false,
+      "zen.mediacontrols.enabled": false}},
+    {"label": "no-notes", "browser": "zen", "prefs": {
+      "_userChrome": ".zen-media-notes { display: none !important; }"}},
+    {"label": "stock", "browser": "firefox", "prefs": {}}
+  ]
+}

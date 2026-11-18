@@ -22,7 +22,8 @@ import run
 def main(path: str):
     exp = json.loads(Path(path).read_text())
     run.MEASURE_S = exp.get("measure", run.MEASURE_S)
-    ok, problems, _ = preflight.check()
+    # "allow_plugged": diagnostic runs on AC; only chip power / WindowServer numbers are meaningful then.
+    ok, problems, _ = preflight.check(require_battery=not exp.get("allow_plugged", False))
     if not ok:
         print("NOT READY:\n- " + "\n- ".join(problems))
         sys.exit(1)

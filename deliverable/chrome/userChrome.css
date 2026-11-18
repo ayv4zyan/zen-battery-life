@@ -1,0 +1,8 @@
+/* Make Firefox Great Again: Zen power fixes that need CSS (no pref exists).
+   Requires toolkit.legacyUserProfileCustomizations.stylesheets = true (set in user.js). */
+
+/* The sidebar media card plays an animated music-note sprite (30 steps/s, forever) while any tab
+   has audio, even when compact mode hides the sidebar. YouTube audio in a background tab:
+   chip 0.21 W -> 0.07 W, WindowServer 264 -> 12 ms/s (experiment 005). The media card and its
+   buttons stay; only the dancing notes go. */
+.zen-media-notes { display: none !important; }

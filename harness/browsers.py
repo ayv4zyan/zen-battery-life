@@ -90,7 +90,8 @@ class GeckoBrowser:
     TUNABLE_PREFIXES = ("zen.widget.macos.", "layout.frame_rate", "gfx.", "layers.", "media.",
                         "widget.", "full-screen-api.", "dom.", "browser.tabs.unload", "image.",
                         "apz.", "general.smoothScroll", "toolkit.cosmeticAnimations", "zen.view.",
-                        "zen.theme.", "ui.", "layout.")
+                        "zen.theme.", "ui.", "layout.", "zen.mediacontrols.",
+                        "toolkit.legacyUserProfileCustomizations.")
 
     def _scrub_prefs_js(self):
         p = self.profile / "prefs.js"
@@ -109,6 +110,15 @@ class GeckoBrowser:
         self.profile.mkdir(parents=True, exist_ok=True)
         self._scrub_prefs_js()
         prefs = {**self.BASE_PREFS, **self.extra_prefs, **(prefs_overlay or {})}
+        # "_userChrome" is not a pref: it is CSS written to chrome/userChrome.css for this run.
+        css = prefs.pop("_userChrome", None)
+        chrome_css = self.profile / "chrome" / "userChrome.css"
+        if css:
+            chrome_css.parent.mkdir(exist_ok=True)
+            chrome_css.write_text(css + "\n")
+            prefs["toolkit.legacyUserProfileCustomizations.stylesheets"] = True
+        elif chrome_css.exists():
+            chrome_css.unlink()
         lines = [f'user_pref({json.dumps(k)}, {json.dumps(v)});' for k, v in prefs.items()]
         (self.profile / "user.js").write_text("\n".join(lines) + "\n")
         ext_dir = self.profile / "extensions"

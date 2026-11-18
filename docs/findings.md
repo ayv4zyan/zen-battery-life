@@ -55,6 +55,20 @@ Possible better fix (source): mask the effect view to the non-content regions so
   90 steps / 3 s, infinite) whenever a tab is playing audio, including while compact mode hides the sidebar.
   System power for this workload is noisy (Safari 4.21 / 2.79 W) because the battery's 60 s accumulator is coarse at ~3 W; trust chip here.
 
+## 4. Zen's media-card note animation (FIXED by userChrome.css)
+
+| YouTube audio in background tab (exp 005, n=2) | Chip | WindowServer CPU | System |
+|---|---|---|---|
+| Firefox | 0.07 W | 5 ms/s | 3.29 W |
+| Zen vib-off | 0.21 W | 264 ms/s | 4.12 W |
+| Zen vib-off, notes hidden | **0.07 W** | 12 ms/s | 2.78 W |
+| Zen vib-off, `zen.mediacontrols.enabled=false` | 0.07 W | 6 ms/s | 3.57 W |
+| Zen vibrancy on, notes hidden | 0.08 W | 13 ms/s | 3.14 W |
+
+- Hiding only `.zen-media-notes` removes the whole cost while keeping the media card. Disabling media controls entirely is no better.
+- System power is noisy at ~3 W (battery accumulator); chip and WindowServer are unambiguous.
+- Upstream idea for Zen: stop the sprite animation when the sidebar is collapsed/hidden (compact mode), or honour it only on hover.
+
 ## Method notes (things that bit us)
 
 - Marionette sets `navigator.webdriver`, and YouTube then kills playback ~40 s in ("Something went wrong"). Firefox/Zen are driven through a small probe extension loaded over the DevTools server instead.

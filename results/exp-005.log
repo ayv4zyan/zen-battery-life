@@ -1,0 +1,16 @@
+[1] vib-off          zen      yt-background-audio      system  4.02 W  chip  0.24 W (cpu 0.20 gpu 0.04)  browser EI   40.8  WS cpu 263.5 ms/s
+[1] vib-off+no-notes zen      yt-background-audio      system  2.79 W  chip  0.07 W (cpu 0.07 gpu 0.00)  browser EI   19.4  WS cpu  12.5 ms/s
+[1] vib-off+no-mediactl zen      yt-background-audio      system  3.24 W  chip  0.07 W (cpu 0.07 gpu 0.00)  browser EI   18.4  WS cpu   5.7 ms/s
+[1] no-notes         zen      yt-background-audio      system  3.10 W  chip  0.09 W (cpu 0.09 gpu 0.00)  browser EI   39.1  WS cpu  13.3 ms/s
+[1] stock            firefox  yt-background-audio      system  3.29 W  chip  0.07 W (cpu 0.07 gpu 0.00)  browser EI   21.8  WS cpu   5.4 ms/s
+[2] vib-off          zen      yt-background-audio      system  4.22 W  chip  0.18 W (cpu 0.14 gpu 0.04)  browser EI   43.6  WS cpu 264.4 ms/s
+[2] vib-off+no-notes zen      yt-background-audio      system  2.77 W  chip  0.07 W (cpu 0.07 gpu 0.00)  browser EI   20.5  WS cpu  12.3 ms/s
+[2] vib-off+no-mediactl zen      yt-background-audio      system  3.90 W  chip  0.07 W (cpu 0.07 gpu 0.00)  browser EI   18.9  WS cpu   5.6 ms/s
+[2] no-notes         zen      yt-background-audio      system  3.18 W  chip  0.07 W (cpu 0.07 gpu 0.00)  browser EI   20.2  WS cpu  13.4 ms/s
+[2] stock            firefox  yt-background-audio      system  3.30 W  chip  0.07 W (cpu 0.07 gpu 0.00)  browser EI   21.5  WS cpu   5.3 ms/s
+
+yt-background-audio      firefox  stock            n=2 system 3.29 W  chip 0.07 W (cpu 0.07 gpu 0.00)  WS 5 ms/s
+yt-background-audio      zen      no-notes         n=2 system 3.14 W  chip 0.08 W (cpu 0.08 gpu 0.00)  WS 13 ms/s
+yt-background-audio      zen      vib-off          n=2 system 4.12 W  chip 0.21 W (cpu 0.17 gpu 0.04)  WS 264 ms/s
+yt-background-audio      zen      vib-off+no-mediactl n=2 system 3.57 W  chip 0.07 W (cpu 0.07 gpu 0.00)  WS 6 ms/s
+yt-background-audio      zen      vib-off+no-notes n=2 system 2.78 W  chip 0.07 W (cpu 0.07 gpu 0.00)  WS 12 ms/s

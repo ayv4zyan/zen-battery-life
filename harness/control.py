@@ -159,6 +159,20 @@ class RDP:
         finally:
             s.close()
 
+    def set_pref(self, name: str, value, timeout: float = 60):
+        kind = {bool: "setBoolPref", int: "setIntPref", str: "setCharPref"}[type(value)]
+        s = self._connect(timeout)
+        try:
+            self._recv(s)
+            self._send(s, {"to": "root", "type": "getRoot"})
+            actor = self._recv(s)["preferenceActor"]
+            self._send(s, {"to": actor, "type": kind, "name": name, "value": value})
+            m = self._recv(s)
+            if "error" in m:
+                raise RuntimeError(f"{kind} {name}: {m}")
+        finally:
+            s.close()
+
     def _connect(self, timeout):
         deadline = time.time() + timeout
         while True:

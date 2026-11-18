@@ -45,7 +45,7 @@ def check(require_battery: bool = True) -> tuple[bool, list[str], dict]:
         problems.append("Accessibility permission for Claude is off (SETUP.md step 3)")
     if require_battery and not c["on_battery"]:
         problems.append("plugged in: unplug the charger")
-    if c["charge_pct"] is not None and c["charge_pct"] < 40:
+    if require_battery and c["charge_pct"] is not None and c["charge_pct"] < 40:
         problems.append(f"battery at {c['charge_pct']}%, need at least 40%")
     if c["low_power_mode"]:
         problems.append("Low Power Mode is on")
